@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fixed dindctl not removing volumes.
+      hash: da7c7bcba8a4a8dac02d39518c494291cb5c2311
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: peakyDicers
+      nested: []
+  version: 12.10.3
+  date: 2021-08-10T06:21:02.501Z
+- commits:
     - subject: Removed fire emoji prefix for firewall logs.
       hash: 30c728fae23ee66f3c1612736bb0c300f0b0762d
       body: ''
