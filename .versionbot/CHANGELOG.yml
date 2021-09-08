@@ -1,4 +1,15 @@
 - commits:
+    - subject: 'Created new dind tool, works with latest supervisor.'
+      hash: 9c3e286cb6f2865033fc1825e124fc0f2e3a0e07
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: peakyDicers
+      nested: []
+  version: 12.11.0
+  date: 2021-09-08T03:09:02.031Z
+- commits:
     - subject: Removed fire emoji prefix for firewall logs.
       hash: 30c728fae23ee66f3c1612736bb0c300f0b0762d
       body: ''
