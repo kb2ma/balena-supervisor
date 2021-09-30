@@ -1,4 +1,15 @@
 - commits:
+    - subject: CI speed improvements
+      hash: ae69736114d5e95b5cb7ca6ec219d5f615cb20fa
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+      nested: []
+  version: 12.10.16
+  date: 2021-09-30T21:16:31.023Z
+- commits:
     - subject: Add supervisor docker-compose
       hash: 68d60d8aaadf17a06c66bf4f8f1f3261a0e93ccb
       body: |
