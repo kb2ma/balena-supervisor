@@ -1,4 +1,18 @@
 - commits:
+    - subject: Update update-locking.md
+      hash: 7c85bb2979e632d09d7c90b173f3a1f4d49f4f78
+      body: |
+        Update print function to Python3
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Genadi Naydenov <genadi@balena.io>
+        signed-off-by: Genadi Naydenov <genadi@balena.io>
+      author: Genadi Naydenov
+      nested: []
+  version: 12.11.0
+  date: 2021-10-20T12:11:29.637Z
+- commits:
     - subject: 'backends/extra-uEnv: Extend custom DTB support for Jetson TX2 NX'
       hash: 7d678fa8384908d7e57cfac150f32cd2025c1bdb
       body: |
