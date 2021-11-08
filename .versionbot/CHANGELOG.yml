@@ -1,4 +1,17 @@
 - commits:
+    - subject: testing
+      hash: d970c9d38a258c96041f5c8eeeb75a55085b1946
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Miguel Casqueira <miguel@balena.io>
+        signed-off-by: Miguel Casqueira <miguel@balena.io>
+      author: Miguel Casqueira
+      nested: []
+  version: 12.11.4
+  date: 2021-11-08T19:08:30.320Z
+- commits:
     - subject: Do not build for staging in circleci job
       hash: 24eea117091a95870ea8eeff885466055d45ee4d
       body: ''
