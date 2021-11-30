@@ -1,4 +1,17 @@
 - commits:
+    - subject: Log entire Exception if message is empty
+      hash: ab8f741257dc0115894cd7934a4006dd00305424
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Miguel Casqueira <miguel@balena.io>
+        signed-off-by: Miguel Casqueira <miguel@balena.io>
+      author: Miguel Casqueira
+      nested: []
+  version: 12.11.14
+  date: 2021-11-30T03:25:01.431Z
+- commits:
     - subject: Increase request timeout to 59s to better align with our backends
       hash: 2eb00fa0da15bb6fdc40421c3cf3800ed1815437
       body: ''
