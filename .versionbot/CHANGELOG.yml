@@ -1,4 +1,19 @@
 - commits:
+    - subject: >-
+        Added `BALENA_SUPERVISOR_PATCH_INTERVAL` for device state patch
+        frequency
+      hash: 00e7d5e442bd73c517ad077cc285ff31d9c3861a
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Miguel Casqueira <miguel@balena.io>
+        signed-off-by: Miguel Casqueira <miguel@balena.io>
+      author: Miguel Casqueira
+      nested: []
+  version: 12.12.0
+  date: 2021-12-07T03:13:22.411Z
+- commits:
     - subject: 'Fix broken local mode after PR #1824'
       hash: 6fd516a93024d2c5c8d95a4f424f1b6f949152ba
       body: |
