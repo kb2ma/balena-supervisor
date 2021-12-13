@@ -1,4 +1,15 @@
 - commits:
+    - subject: Separate backoff from current state reporting
+      hash: 43a5dd024ed2c457b6e8fa92460c866e43bc65a3
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 12.11.21
+  date: 2021-12-13T16:57:09.361Z
+- commits:
     - subject: Skip initial apply until a target has been set
       hash: 9015b0e22f7edf973798d5ace3d60e32d43bb042
       body: >
