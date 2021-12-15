@@ -1,4 +1,19 @@
 - commits:
+    - subject: Clean leftover locks after supervisor crash
+      hash: 7f539547d02515b32cd28d65e542fb06c1e794c6
+      body: |
+        This will prevent the supervisor being unable to update target state
+        after a crash due to leftover locks
+      footer:
+        Change-type: patch
+        change-type: patch
+        Closes: '#1758'
+        closes: '#1758'
+      author: Felipe Lalanne
+      nested: []
+  version: 12.11.21
+  date: 2021-12-15T22:33:59.213Z
+- commits:
     - subject: Skip initial apply until a target has been set
       hash: 9015b0e22f7edf973798d5ace3d60e32d43bb042
       body: >
