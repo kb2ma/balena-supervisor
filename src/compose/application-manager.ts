@@ -1,4 +1,3 @@
-import * as express from 'express';
 import * as _ from 'lodash';
 import { EventEmitter } from 'events';
 import StrictEventEmitter from 'strict-event-emitter-types';
@@ -8,7 +7,6 @@ import { transaction, Transaction } from '../db';
 import * as logger from '../logger';
 import * as dbFormat from '../device-state/db-format';
 import LocalModeManager from '../local-mode';
-import { createV2Api } from '../device-api/v2';
 import { Proxyvisor } from '../proxyvisor';
 
 import { validateTargetContracts } from '../lib/contracts';
@@ -55,18 +53,8 @@ export const removeAllListeners: typeof events['removeAllListeners'] = events.re
 	events,
 );
 
-const proxyvisor = new Proxyvisor();
+export const proxyvisor = new Proxyvisor();
 const localModeManager = new LocalModeManager();
-
-export const router = (() => {
-	const $router = express.Router();
-
-	createV2Api($router);
-
-	$router.use(proxyvisor.router);
-
-	return $router;
-})();
 
 // We keep track of the containers we've started, to avoid triggering successive start
 // requests for a container

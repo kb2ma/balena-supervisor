@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import * as eventTracker from '../event-tracker';
 import * as deviceState from '../device-state';
+import { proxyvisor } from '../compose/application-manager';
 import blink = require('../lib/blink');
 import log from '../lib/supervisor-console';
 import * as apiKeys from '../lib/api-keys';
@@ -92,6 +93,8 @@ export class SupervisorAPI {
 		for (const router of this.routers) {
 			this.api.use(router);
 		}
+
+		this.api.use(proxyvisor.router);
 
 		this.api.use(middleware.errorHandler);
 	}
