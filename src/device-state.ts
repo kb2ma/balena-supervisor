@@ -1,7 +1,6 @@
 import * as Bluebird from 'bluebird';
 import { stripIndent } from 'common-tags';
 import { EventEmitter } from 'events';
-import * as express from 'express';
 import * as _ from 'lodash';
 import StrictEventEmitter from 'strict-event-emitter-types';
 import { isRight } from 'fp-ts/lib/Either';
@@ -19,7 +18,6 @@ import {
 } from './compose/composition-steps';
 import { loadTargetFromFile } from './device-state/preload';
 import * as globalEventBus from './event-bus';
-import * as hostConfig from './host-config';
 import constants = require('./lib/constants');
 import * as dbus from './lib/dbus';
 import {
@@ -28,7 +26,6 @@ import {
 	UpdatesLockedError,
 } from './lib/errors';
 import * as updateLock from './lib/update-lock';
-import * as validation from './lib/validation';
 import * as network from './network';
 
 import * as applicationManager from './compose/application-manager';
@@ -46,8 +43,6 @@ import {
 import * as dbFormat from './device-state/db-format';
 import * as apiKeys from './lib/api-keys';
 
-const disallowedHostConfigPatchFields = ['local_ip', 'local_port'];
-
 function parseTargetState(state: unknown): TargetState {
 	const res = TargetState.decode(state);
 
@@ -57,140 +52,6 @@ function parseTargetState(state: unknown): TargetState {
 
 	const errors = ['Invalid target state.'].concat(Reporter.report(res));
 	throw new TargetStateError(errors.join('\n'));
-}
-
-// TODO (refactor): This shouldn't be here, and instead should be part of the other
-// device api stuff in ./device-api
-function createDeviceStateRouter() {
-	router = express.Router();
-
-	const rebootOrShutdown = async (
-		req: express.Request,
-		res: express.Response,
-		action: DeviceStateStepTarget,
-	) => {
-		const override = await config.get('lockOverride');
-		const force = validation.checkTruthy(req.body.force) || override;
-		try {
-			const response = await executeStepAction({ action }, { force });
-			res.status(202).json(response);
-		} catch (e) {
-			const status = e instanceof UpdatesLockedError ? 423 : 500;
-			res.status(status).json({
-				Data: '',
-				Error: (e != null ? e.message : undefined) || e || 'Unknown error',
-			});
-		}
-	};
-	router.post('/v1/reboot', (req, res) => rebootOrShutdown(req, res, 'reboot'));
-	router.post('/v1/shutdown', (req, res) =>
-		rebootOrShutdown(req, res, 'shutdown'),
-	);
-
-	router.get('/v1/device/host-config', (_req, res) =>
-		hostConfig
-			.get()
-			.then((conf) => res.json(conf))
-			.catch((err) =>
-				res.status(503).send(err?.message ?? err ?? 'Unknown error'),
-			),
-	);
-
-	router.patch('/v1/device/host-config', async (req, res) => {
-		// Because v1 endpoints are legacy, and this endpoint might already be used
-		// by multiple users, adding too many throws might have unintended side effects.
-		// Thus we're simply logging invalid fields and allowing the request to continue.
-
-		try {
-			if (!req.body.network) {
-				log.warn("Key 'network' must exist in PATCH body");
-				// If network does not exist, skip all field validation checks below
-				throw new Error();
-			}
-
-			const { proxy } = req.body.network;
-
-			// Validate proxy fields, if they exist
-			if (proxy && Object.keys(proxy).length) {
-				const blacklistedFields = Object.keys(proxy).filter((key) =>
-					disallowedHostConfigPatchFields.includes(key),
-				);
-
-				if (blacklistedFields.length > 0) {
-					log.warn(`Invalid proxy field(s): ${blacklistedFields.join(', ')}`);
-				}
-
-				if (
-					proxy.type &&
-					!constants.validRedsocksProxyTypes.includes(proxy.type)
-				) {
-					log.warn(
-						`Invalid redsocks proxy type, must be one of ${constants.validRedsocksProxyTypes.join(
-							', ',
-						)}`,
-					);
-				}
-
-				if (proxy.noProxy && !Array.isArray(proxy.noProxy)) {
-					log.warn('noProxy field must be an array of addresses');
-				}
-			}
-		} catch (e) {
-			/* noop */
-		}
-
-		try {
-			// If hostname is an empty string, return first 7 digits of device uuid
-			if (req.body.network?.hostname === '') {
-				const uuid = await config.get('uuid');
-				req.body.network.hostname = uuid?.slice(0, 7);
-			}
-
-			await hostConfig.patch(req.body);
-			res.status(200).send('OK');
-		} catch (err) {
-			res.status(503).send(err?.message ?? err ?? 'Unknown error');
-		}
-	});
-
-	router.get('/v1/device', async (_req, res) => {
-		try {
-			const state = await getStatus();
-			const stateToSend = _.pick(state.local, [
-				'api_port',
-				'ip_address',
-				'os_version',
-				'mac_address',
-				'supervisor_version',
-				'update_pending',
-				'update_failed',
-				'update_downloaded',
-			]) as Dictionary<unknown>;
-			if (state.local?.is_on__commit != null) {
-				stateToSend.commit = state.local.is_on__commit;
-			}
-			const service = _.toPairs(
-				_.toPairs(state.local?.apps)[0]?.[1]?.services,
-			)[0]?.[1];
-
-			if (service != null) {
-				stateToSend.status = service.status;
-				if (stateToSend.status === 'Running') {
-					stateToSend.status = 'Idle';
-				}
-				stateToSend.download_progress = service.download_progress;
-			}
-			res.json(stateToSend);
-		} catch (e) {
-			res.status(500).json({
-				Data: '',
-				Error: (e != null ? e.message : undefined) || e || 'Unknown error',
-			});
-		}
-	});
-
-	router.use(applicationManager.router);
-	return router;
 }
 
 interface DeviceStateEvents {
@@ -225,7 +86,7 @@ export const removeAllListeners: typeof events['removeAllListeners'] = events.re
 	events,
 );
 
-type DeviceStateStepTarget = 'reboot' | 'shutdown' | 'noop';
+export type DeviceStateStepTarget = 'reboot' | 'shutdown' | 'noop';
 
 type PossibleStepTargets = CompositionStepAction | DeviceStateStepTarget;
 type DeviceStateStep<T extends PossibleStepTargets> =
@@ -255,8 +116,6 @@ let applyInProgress = false;
 export let connected: boolean;
 export let lastSuccessfulUpdate: number | null = null;
 
-export let router: express.Router;
-
 events.on('error', (err) => log.error('deviceState error: ', err));
 events.on('apply-target-state-end', function (err) {
 	if (err != null) {
@@ -277,7 +136,6 @@ export const initialized = (async () => {
 	await applicationManager.initialized;
 
 	applicationManager.on('change', (d) => reportCurrentState(d));
-	createDeviceStateRouter();
 
 	config.on('change', (changedConfig) => {
 		if (changedConfig.loggingEnabled != null) {

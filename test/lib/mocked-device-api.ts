@@ -132,7 +132,7 @@ async function create(): Promise<SupervisorAPI> {
 
 	// Create SupervisorAPI
 	const api = new SupervisorAPI({
-		routers: [v1.router, deviceState.router],
+		routers: [v1.router],
 		healthchecks: [deviceState.healthcheck, apiBinder.healthcheck],
 	});
 
