@@ -1,17 +1,14 @@
 import * as _ from 'lodash';
-import { Router } from 'express';
 import rewire = require('rewire');
 
 import { unlinkAll } from '../../src/lib/fs-utils';
-import * as applicationManager from '../../src/compose/application-manager';
 import * as networkManager from '../../src/compose/network-manager';
 import * as serviceManager from '../../src/compose/service-manager';
 import * as volumeManager from '../../src/compose/volume-manager';
 import * as commitStore from '../../src/compose/commit';
 import * as config from '../../src/config';
 import * as db from '../../src/db';
-import { createV1Api } from '../../src/device-api/v1';
-import { createV2Api } from '../../src/device-api/v2';
+import * as v1 from '../../src/device-api/v1';
 import * as deviceState from '../../src/device-state';
 import SupervisorAPI from '../../src/device-api';
 import { Service } from '../../src/compose/service';
@@ -135,7 +132,7 @@ async function create(): Promise<SupervisorAPI> {
 
 	// Create SupervisorAPI
 	const api = new SupervisorAPI({
-		routers: [deviceState.router, buildRoutes()],
+		routers: [v1.router, deviceState.router],
 		healthchecks: [deviceState.healthcheck, apiBinder.healthcheck],
 	});
 
@@ -173,23 +170,12 @@ async function initConfig(): Promise<void> {
 	}
 }
 
-function buildRoutes(): Router {
-	// Add to existing apiBinder router (it contains additional middleware and endpoints)
-	const router = apiBinder.router;
-	// Add V1 routes
-	createV1Api(applicationManager.router);
-	// Add V2 routes
-	createV2Api(applicationManager.router);
-	// Return modified Router
-	return router;
-}
-
 // TO-DO: Create a cleaner way to restore previous values.
 const originalNetGetAll = networkManager.getAllByAppId;
 const originalVolGetAll = volumeManager.getAllByAppId;
 const originalSvcGetAppId = serviceManager.getAllByAppId;
 const originalSvcGetStatus = serviceManager.getStatus;
-const originalReadyForUpdates = apiBinder.__get__('readyForUpdates');
+const originalReadyForUpdates = apiBinder.isReadyForUpdates();
 
 function setupStubs() {
 	apiBinder.__set__('readyForUpdates', true);

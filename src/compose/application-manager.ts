@@ -1,46 +1,45 @@
 import * as express from 'express';
 import * as _ from 'lodash';
+import { EventEmitter } from 'events';
+import StrictEventEmitter from 'strict-event-emitter-types';
 
 import * as config from '../config';
 import { transaction, Transaction } from '../db';
+import * as logger from '../logger';
 import * as dbFormat from '../device-state/db-format';
+import LocalModeManager from '../local-mode';
+import { createV2Api } from '../device-api/v2';
+import { Proxyvisor } from '../proxyvisor';
+
 import { validateTargetContracts } from '../lib/contracts';
 import constants = require('../lib/constants');
 import { docker } from '../lib/docker-utils';
-import * as logger from '../logger';
 import log from '../lib/supervisor-console';
-import LocalModeManager from '../local-mode';
+import * as updateLock from '../lib/update-lock';
 import {
 	ContractViolationError,
 	InternalInconsistencyError,
 } from '../lib/errors';
-import StrictEventEmitter from 'strict-event-emitter-types';
+import { checkTruthy, checkInt } from '../lib/validation';
 
 import App from './app';
 import * as volumeManager from './volume-manager';
 import * as networkManager from './network-manager';
 import * as serviceManager from './service-manager';
 import * as imageManager from './images';
-import type { Image } from './images';
-import { getExecutors, CompositionStepT } from './composition-steps';
+import { getExecutors, generateStep } from './composition-steps';
 import * as commitStore from './commit';
-
 import Service from './service';
 
-import { createV1Api } from '../device-api/v1';
-import { createV2Api } from '../device-api/v2';
-import { CompositionStep, generateStep } from './composition-steps';
-import {
+import type {
 	InstancedAppState,
 	TargetApps,
 	DeviceStatus,
 	DeviceReportFields,
 	TargetState,
 } from '../types/state';
-import { checkTruthy, checkInt } from '../lib/validation';
-import { Proxyvisor } from '../proxyvisor';
-import * as updateLock from '../lib/update-lock';
-import { EventEmitter } from 'events';
+import type { Image } from './images';
+import type { CompositionStepT, CompositionStep } from './composition-steps';
 
 type ApplicationManagerEventEmitter = StrictEventEmitter<
 	EventEmitter,
@@ -62,7 +61,6 @@ const localModeManager = new LocalModeManager();
 export const router = (() => {
 	const $router = express.Router();
 
-	createV1Api($router);
 	createV2Api($router);
 
 	$router.use(proxyvisor.router);
