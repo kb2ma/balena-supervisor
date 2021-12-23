@@ -94,6 +94,7 @@ export class SupervisorAPI {
 			this.api.use(router);
 		}
 
+		// TODO: When dependent devices are release-ready, this should be a separate module / service from the Supervisor
 		this.api.use(proxyvisor.router);
 
 		this.api.use(middleware.errorHandler);
