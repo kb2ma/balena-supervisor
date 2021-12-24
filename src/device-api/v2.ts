@@ -22,17 +22,13 @@ import * as images from '../compose/images';
 import * as volumeManager from '../compose/volume-manager';
 import * as serviceManager from '../compose/service-manager';
 import { spawnJournalctl } from '../lib/journald';
-import {
-	appNotFoundMessage,
-	serviceNotFoundMessage,
-	v2ServiceEndpointInputErrorMessage,
-} from '../lib/messages';
 import log from '../lib/supervisor-console';
 import supervisorVersion = require('../lib/supervisor-version');
 import { checkInt, checkTruthy } from '../lib/validation';
 import { isVPNActive } from '../network';
 import { doPurge, doRestart, safeStateClone } from './common';
 import { AuthorizedRequest } from './types';
+import * as messages from './messages';
 
 export const router = express.Router();
 
@@ -66,13 +62,13 @@ const handleServiceAction = (
 			const app = apps[appId];
 
 			if (app == null) {
-				res.status(404).send(appNotFoundMessage);
+				res.status(404).send(messages.appNotFoundMessage);
 				return;
 			}
 
 			// Work if we have a service name or an image id
 			if (imageId == null && serviceName == null) {
-				throw new Error(v2ServiceEndpointInputErrorMessage);
+				throw new Error(messages.v2ServiceEndpointInputErrorMessage);
 			}
 
 			let service: Service | undefined;
@@ -85,7 +81,7 @@ const handleServiceAction = (
 				targetService = _.find(targetApp.services, { serviceName });
 			}
 			if (service == null) {
-				res.status(404).send(serviceNotFoundMessage);
+				res.status(404).send(messages.serviceNotFoundMessage);
 				return;
 			}
 

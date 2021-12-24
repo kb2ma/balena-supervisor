@@ -1,7 +1,7 @@
 import * as Bluebird from 'bluebird';
 import * as _ from 'lodash';
 
-import { appNotFoundMessage } from '../lib/messages';
+import { appNotFoundMessage } from './messages';
 import * as logger from '../logger';
 import * as deviceState from '../device-state';
 import * as applicationManager from '../compose/application-manager';
