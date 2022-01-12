@@ -1,13 +1,8 @@
 import * as t from 'io-ts';
 
 import * as constants from '../lib/constants';
-
-import {
-	NullOrUndefined,
-	PermissiveBoolean,
-	PermissiveNumber,
-	StringJSON,
-} from './types';
+import { NullOrUndefined } from '../types';
+import { PermissiveBoolean, PermissiveNumber, StringJSON } from './types';
 
 export const schemaTypes = {
 	apiEndpoint: {

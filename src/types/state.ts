@@ -13,6 +13,7 @@ import {
 	NumericIdentifier,
 	ShortString,
 	DeviceName,
+	withDefault,
 } from './basic';
 
 import App from '../compose/app';
@@ -57,18 +58,6 @@ export interface DeviceStatus {
 	};
 	commit?: string;
 }
-
-// Return a type with a default value
-const withDefault = <T extends t.Any>(
-	type: T,
-	defaultValue: t.TypeOf<T>,
-): t.Type<t.TypeOf<T>> =>
-	new t.Type(
-		type.name,
-		type.is,
-		(v, c) => type.validate(!!v ? v : defaultValue, c),
-		type.encode,
-	);
 
 /**
  * Utility function to return a io-ts type from a native typescript

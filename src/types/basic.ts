@@ -1,6 +1,22 @@
 import * as t from 'io-ts';
-import { chain, fold } from 'fp-ts/lib/Either';
+import { chain, fold, isRight } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/function';
+
+export const NullOrUndefined = t.union([t.undefined, t.null]);
+const isNullOrUndefined = (val: any) => isRight(NullOrUndefined.decode(val));
+
+// Utility type function which returns a type with a default value
+export const withDefault = <T extends t.Any>(
+	type: T,
+	defaultValue: t.TypeOf<T>,
+	shouldDefault: (val: t.TypeOf<T>) => boolean = isNullOrUndefined,
+): t.Type<t.TypeOf<T>> =>
+	new t.Type(
+		type.name,
+		type.is,
+		(v, c) => type.validate(shouldDefault(v) ? defaultValue : v, c),
+		type.encode,
+	);
 
 /**
  * A short string is a non null string between

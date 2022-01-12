@@ -98,5 +98,3 @@ export class StringJSON<T> extends t.Type<T, string> {
 		);
 	}
 }
-
-export const NullOrUndefined = t.union([t.undefined, t.null]);
