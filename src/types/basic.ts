@@ -1,5 +1,5 @@
 import * as t from 'io-ts';
-import { chain } from 'fp-ts/lib/Either';
+import { chain, fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/function';
 
 /**
@@ -47,7 +47,7 @@ export const StringIdentifier = new t.Type<string, string>(
 			chain((s) =>
 				!isNaN(+s) && +s === parseInt(s, 10) && +s >= 0
 					? t.success(s)
-					: t.failure(s, c, 'must be be an positive integer'),
+					: t.failure(s, c, 'must be a positive integer'),
 			),
 		),
 	String,
@@ -74,7 +74,7 @@ export const NumericIdentifier = new t.Type<number, StringOrNumber>(
 			chain((n) =>
 				!isNaN(+n) && +n === parseInt(String(n), 10) && +n >= 0
 					? t.success(+n)
-					: t.failure(n, c, 'must be be an positive integer'),
+					: t.failure(n, c, 'must be a positive integer'),
 			),
 		),
 	Number,
@@ -182,5 +182,83 @@ export const DeviceName = new t.Type<string, string>(
 		),
 	t.identity,
 );
-
 export type DeviceName = t.TypeOf<typeof DeviceName>;
+
+/**
+ * A string boolean, one of ['true', 'false', '1', '0', 'on', 'off'].
+ * Decodes to a boolean.
+ */
+
+export const BooleanFromString = new t.Type<boolean, string, unknown>(
+	'BooleanFromString',
+	t.boolean.is,
+	(i, c) =>
+		pipe(
+			t.string.validate(i, c),
+			chain((s) => {
+				if (['true', '1', 'on'].includes(s)) {
+					return t.success(true);
+				}
+
+				if (['false', '0', 'off'].includes(s)) {
+					return t.success(false);
+				}
+
+				return t.failure(i, c, 'must be a valid string boolean');
+			}),
+		),
+	String,
+);
+export type BooleanFromString = t.TypeOf<typeof BooleanFromString>;
+
+/**
+ * A boolean integer, one of [0, 1].
+ * Decodes to a boolean.
+ */
+export const BooleanFromInt = new t.Type<boolean, number, unknown>(
+	'BooleanFromInt',
+	t.boolean.is,
+	(i, c) =>
+		pipe(
+			t.number.validate(i, c),
+			chain((n) =>
+				[0, 1].includes(n)
+					? t.success(Boolean(n))
+					: t.failure(i, c, 'must be a valid integer boolean'),
+			),
+		),
+	Number,
+);
+export type BooleanFromInt = t.TypeOf<typeof BooleanFromInt>;
+
+/**
+ * A stringified or regular boolean, one of the set of (VALID_STRING_BOOLS | [true, false] | [0, 1]).
+ * Decodes to a boolean.
+ *
+ * TODO: replace PermissiveBoolean in src/config/types.ts
+ */
+export const BooleanIdentifier = new t.Type<
+	boolean,
+	BooleanFromString | BooleanFromInt | boolean,
+	unknown
+>(
+	'BooleanIdentifier',
+	t.boolean.is,
+	(i, c) =>
+		pipe(
+			t.boolean.validate(i, c),
+			fold(() => BooleanFromString.validate(i, c), t.success),
+			fold(() => BooleanFromInt.validate(i, c), t.success),
+			fold(
+				() =>
+					t.failure(
+						i,
+						c,
+						'must be a valid boolean identifier of type boolean, string, or integer',
+					),
+				t.success,
+			),
+		),
+	t.identity,
+);
+export type BooleanIdentifier = t.TypeOf<typeof BooleanIdentifier>;
