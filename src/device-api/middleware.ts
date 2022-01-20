@@ -7,7 +7,7 @@ import log from '../lib/supervisor-console';
 import { UpdatesLockedError } from '../lib/errors';
 
 import type { Request, Response, NextFunction } from 'express';
-import type { AuthorizedRequestHandler } from './types';
+import type { AuthorizedRequestHandler } from '../types';
 
 /**
  * Request logger

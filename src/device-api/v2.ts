@@ -26,8 +26,8 @@ import log from '../lib/supervisor-console';
 import supervisorVersion = require('../lib/supervisor-version');
 import { checkInt, checkTruthy } from '../lib/validation';
 import { isVPNActive } from '../network';
+import { AuthorizedRequest } from '../types';
 import { doPurge, doRestart, safeStateClone } from './common';
-import { AuthorizedRequest } from './types';
 import * as messages from './messages';
 
 export const router = express.Router();

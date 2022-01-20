@@ -8,8 +8,8 @@ import * as deviceState from '../device-state';
 import * as TargetState from '../device-state/target-state';
 import { getApp } from '../device-state/db-format';
 import * as hostConfig from '../host-config';
+import { AuthorizedRequest } from '../types';
 import { doRestart, doPurge } from './common';
-import { AuthorizedRequest } from './types';
 
 import * as constants from '../lib/constants';
 import { checkInt, checkTruthy } from '../lib/validation';

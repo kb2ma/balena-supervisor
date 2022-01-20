@@ -10,7 +10,7 @@ import * as apiKeys from '../lib/api-keys';
 import * as middleware from './middleware';
 
 import type { Server } from 'http';
-import type { AuthorizedRequest } from './types';
+import type { AuthorizedRequest } from '../types';
 
 interface SupervisorAPIConstructOpts {
 	routers: express.Router[];
