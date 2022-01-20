@@ -9,14 +9,37 @@ const isNullOrUndefined = (val: any) => isRight(NullOrUndefined.decode(val));
 export const withDefault = <T extends t.Any>(
 	type: T,
 	defaultValue: t.TypeOf<T>,
-	shouldDefault: (val: t.TypeOf<T>) => boolean = isNullOrUndefined,
+	shouldDefault?: (val: t.TypeOf<T>) => boolean,
 ): t.Type<t.TypeOf<T>> =>
 	new t.Type(
 		type.name,
 		type.is,
-		(v, c) => type.validate(shouldDefault(v) ? defaultValue : v, c),
+		(v, c) =>
+			type.validate(
+				(shouldDefault ?? isNullOrUndefined)(v) ? defaultValue : v,
+				c,
+			),
 		type.encode,
 	);
+
+// Utility function to turn a TypeScript enum into a io-ts codec
+// Adapted from https://github.com/gcanti/io-ts/issues/216
+export const fromEnum = <EnumType>(
+	enumName: string,
+	theEnum: Record<string, string | number>,
+	getMessage: (ctx: any[]) => string,
+) => {
+	const enumVals = Object.values<unknown>(theEnum);
+	const isEnumValue = (i: unknown): i is EnumType => enumVals.includes(i);
+
+	return new t.Type<EnumType>(
+		enumName,
+		isEnumValue,
+		(i, c) =>
+			isEnumValue(i) ? t.success(i) : t.failure(i, c, getMessage(enumVals)),
+		t.identity,
+	);
+};
 
 /**
  * A short string is a non null string between

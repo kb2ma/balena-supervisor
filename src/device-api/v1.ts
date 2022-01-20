@@ -12,24 +12,18 @@ import { AuthorizedRequest } from '../types';
 import { doRestart, doPurge } from './common';
 
 import * as constants from '../lib/constants';
-import { checkInt, checkTruthy } from '../lib/validation';
 import log from '../lib/supervisor-console';
 import { UpdatesLockedError } from '../lib/errors';
 import * as applicationManager from '../compose/application-manager';
 import { generateStep } from '../compose/composition-steps';
 import * as commitStore from '../compose/commit';
 
-const disallowedHostConfigPatchFields = ['local_ip', 'local_port'];
-
 export const router = express.Router();
 
 router.post('/v1/restart', (req: AuthorizedRequest, res, next) => {
-	const appId = checkInt(req.body.appId);
-	const force = checkTruthy(req.body.force);
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { appId, force } = res.locals;
 	eventTracker.track('Restart container (v1)', { appId });
-	if (appId == null) {
-		return res.status(400).send('Missing app id');
-	}
 
 	// handle the case where the appId is out of scope
 	if (!req.auth.isScoped({ apps: [appId] })) {
@@ -51,11 +45,8 @@ const stopOrStart = (
 	next: express.NextFunction,
 	action: 'start' | 'stop',
 ) => {
-	const appId = checkInt(req.params.appId);
-	const force = checkTruthy(req.body.force);
-	if (appId == null) {
-		return res.status(400).send('Missing app id');
-	}
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { appId, force } = res.locals;
 
 	return Promise.all([applicationManager.getCurrentApps(), getApp(appId)])
 		.then(([apps, targetApp]) => {
@@ -125,12 +116,12 @@ router.post('/v1/apps/:appId/stop', createStopOrStartHandler('stop'));
 router.post('/v1/apps/:appId/start', createStopOrStartHandler('start'));
 
 const rebootOrShutdown = async (
-	req: express.Request,
+	_req: express.Request,
 	res: express.Response,
 	action: deviceState.DeviceStateStepTarget,
 ) => {
-	const override = await config.get('lockOverride');
-	const force = checkTruthy(req.body.force) || override;
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { force } = res.locals;
 	try {
 		const response = await deviceState.executeStepAction({ action }, { force });
 		res.status(202).json(response);
@@ -148,11 +139,9 @@ router.post('/v1/shutdown', (req, res) =>
 );
 
 router.get('/v1/apps/:appId', async (req: AuthorizedRequest, res, next) => {
-	const appId = checkInt(req.params.appId);
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { appId } = res.locals;
 	eventTracker.track('GET app (v1)', { appId });
-	if (appId == null) {
-		return res.status(400).send('Missing app id');
-	}
 
 	try {
 		const apps = await applicationManager.getCurrentApps();
@@ -198,12 +187,8 @@ router.get('/v1/apps/:appId', async (req: AuthorizedRequest, res, next) => {
 });
 
 router.post('/v1/purge', (req: AuthorizedRequest, res, next) => {
-	const appId = checkInt(req.body.appId);
-	const force = checkTruthy(req.body.force);
-	if (appId == null) {
-		const errMsg = 'Invalid or missing appId';
-		return res.status(400).send(errMsg);
-	}
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { appId, force } = res.locals;
 
 	// handle the case where the appId is out of scope
 	if (!req.auth.isScoped({ apps: [appId] })) {
@@ -219,14 +204,17 @@ router.post('/v1/purge', (req: AuthorizedRequest, res, next) => {
 		.catch(next);
 });
 
-router.post('/v1/update', (req: AuthorizedRequest, res, next) => {
+router.post('/v1/update', (_req: AuthorizedRequest, res, next) => {
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { force } = res.locals;
+
 	eventTracker.track('Update notification');
 	if (apiBinder.isReadyForUpdates()) {
 		config
 			.get('instantUpdates')
 			.then((instantUpdates) => {
 				if (instantUpdates) {
-					TargetState.update(req.body.force, true).catch(_.noop);
+					TargetState.update(force, true).catch(_.noop);
 					res.sendStatus(204);
 				} else {
 					log.debug(
@@ -251,48 +239,6 @@ router.get('/v1/device/host-config', (_req, res) =>
 );
 
 router.patch('/v1/device/host-config', async (req, res) => {
-	// Because v1 endpoints are legacy, and this endpoint might already be used
-	// by multiple users, adding too many throws might have unintended side effects.
-	// Thus we're simply logging invalid fields and allowing the request to continue.
-
-	try {
-		if (!req.body.network) {
-			log.warn("Key 'network' must exist in PATCH body");
-			// If network does not exist, skip all field validation checks below
-			throw new Error();
-		}
-
-		const { proxy } = req.body.network;
-
-		// Validate proxy fields, if they exist
-		if (proxy && Object.keys(proxy).length) {
-			const blacklistedFields = Object.keys(proxy).filter((key) =>
-				disallowedHostConfigPatchFields.includes(key),
-			);
-
-			if (blacklistedFields.length > 0) {
-				log.warn(`Invalid proxy field(s): ${blacklistedFields.join(', ')}`);
-			}
-
-			if (
-				proxy.type &&
-				!constants.validRedsocksProxyTypes.includes(proxy.type)
-			) {
-				log.warn(
-					`Invalid redsocks proxy type, must be one of ${constants.validRedsocksProxyTypes.join(
-						', ',
-					)}`,
-				);
-			}
-
-			if (proxy.noProxy && !Array.isArray(proxy.noProxy)) {
-				log.warn('noProxy field must be an array of addresses');
-			}
-		}
-	} catch (e) {
-		/* noop */
-	}
-
 	try {
 		// If hostname is an empty string, return first 7 digits of device uuid
 		if (req.body.network?.hostname === '') {

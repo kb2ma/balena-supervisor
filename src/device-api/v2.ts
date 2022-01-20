@@ -24,7 +24,6 @@ import * as serviceManager from '../compose/service-manager';
 import { spawnJournalctl } from '../lib/journald';
 import log from '../lib/supervisor-console';
 import supervisorVersion = require('../lib/supervisor-version');
-import { checkInt, checkTruthy } from '../lib/validation';
 import { isVPNActive } from '../network';
 import { AuthorizedRequest } from '../types';
 import { doPurge, doRestart, safeStateClone } from './common';
@@ -38,15 +37,8 @@ const handleServiceAction = (
 	next: NextFunction,
 	action: CompositionStepAction,
 ): Resolvable<void> => {
-	const { imageId, serviceName, force } = req.body;
-	const appId = checkInt(req.params.appId);
-	if (!appId) {
-		res.status(400).json({
-			status: 'failed',
-			message: 'Missing app id',
-		});
-		return;
-	}
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { imageId, serviceName, appId, force } = res.locals;
 
 	// handle the case where the appId is out of scope
 	if (!req.auth.isScoped({ apps: [appId] })) {
@@ -112,14 +104,8 @@ const createServiceActionHandler = (action: string) =>
 router.post(
 	'/v2/applications/:appId/purge',
 	(req: AuthorizedRequest, res: Response, next: NextFunction) => {
-		const { force } = req.body;
-		const appId = checkInt(req.params.appId);
-		if (!appId) {
-			return res.status(400).json({
-				status: 'failed',
-				message: 'Missing app id',
-			});
-		}
+		// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+		const { appId, force } = res.locals;
 
 		// handle the case where the application is out of scope
 		if (!req.auth.isScoped({ apps: [appId] })) {
@@ -156,14 +142,8 @@ router.post(
 router.post(
 	'/v2/applications/:appId/restart',
 	(req: AuthorizedRequest, res: Response, next: NextFunction) => {
-		const { force } = req.body;
-		const appId = checkInt(req.params.appId);
-		if (!appId) {
-			return res.status(400).json({
-				status: 'failed',
-				message: 'Missing app id',
-			});
-		}
+		// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+		const { appId, force } = res.locals;
 
 		// handle the case where the appId is out of scope
 		if (!req.auth.isScoped({ apps: [appId] })) {
@@ -270,14 +250,8 @@ router.get(
 router.get(
 	'/v2/applications/:appId/state',
 	async (req: AuthorizedRequest, res: Response) => {
-		// Check application ID provided is valid
-		const appId = checkInt(req.params.appId);
-		if (!appId) {
-			return res.status(400).json({
-				status: 'failed',
-				message: `Invalid application ID: ${req.params.appId}`,
-			});
-		}
+		// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+		const { appId } = res.locals;
 
 		// Query device for all applications
 		let apps: any;
@@ -342,8 +316,10 @@ router.post('/v2/local/target-state', async (req, res) => {
 		});
 	}
 
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { force } = res.locals;
+
 	// Now attempt to set the state
-	const force = req.body.force;
 	const targetState = req.body;
 	try {
 		await deviceState.setTarget(targetState, true);
@@ -417,22 +393,25 @@ router.get('/v2/version', (_req, res) => {
 });
 
 router.get('/v2/containerId', async (req: AuthorizedRequest, res) => {
-	const services = (await serviceManager.getAll()).filter((service) =>
-		req.auth.isScoped({ apps: [service.appId] }),
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { serviceName, service } = res.locals;
+
+	const services = (await serviceManager.getAll()).filter((svc) =>
+		req.auth.isScoped({ apps: [svc.appId] }),
 	);
 
-	if (req.query.serviceName != null || req.query.service != null) {
-		const serviceName = req.query.serviceName || req.query.service;
-		const service = _.find(services, (svc) => svc.serviceName === serviceName);
-		if (service != null) {
+	if (serviceName != null || service != null) {
+		const svcName = serviceName || service;
+		const svc = _.find(services, (s) => s.serviceName === svcName);
+		if (svc != null) {
 			res.status(200).json({
 				status: 'success',
-				containerId: service.containerId,
+				containerId: svc.containerId,
 			});
 		} else {
 			res.status(503).json({
 				status: 'failed',
-				message: 'Could not find service with that name',
+				message: messages.serviceNameNotFoundMessage,
 			});
 		}
 	} else {
@@ -571,13 +550,9 @@ router.get('/v2/cleanup-volumes', async (req: AuthorizedRequest, res) => {
 	});
 });
 
-router.post('/v2/journal-logs', (req, res) => {
-	const all = checkTruthy(req.body.all);
-	const follow = checkTruthy(req.body.follow);
-	const count = checkInt(req.body.count, { positive: true }) || undefined;
-	const unit = req.body.unit;
-	const format = req.body.format || 'short';
-	const containerId = req.body.containerId;
+router.post('/v2/journal-logs', (_req, res) => {
+	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
+	const { all, follow, count, unit, format, containerId } = res.locals;
 
 	const journald = spawnJournalctl({
 		all,

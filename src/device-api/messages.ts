@@ -7,3 +7,8 @@ export const serviceNotFoundMessage =
 
 export const v2ServiceEndpointInputErrorMessage =
 	'This endpoint requires one of imageId or serviceName';
+
+export const missingAppIdInputErrorMessage = 'Missing app id';
+
+export const serviceNameNotFoundMessage =
+	'Could not find service with that name';

@@ -634,7 +634,9 @@ describe('SupervisorAPI [V1 Endpoints]', () => {
 
 		it('returns 204 with no parameters', async () => {
 			// Stub response for getting instantUpdates
-			configStub.resolves(true);
+			configStub.callsFake((conf) =>
+				Promise.resolve(conf === 'instantUpdates'),
+			);
 			// Make request
 			await request
 				.post('/v1/update')
@@ -643,7 +645,7 @@ describe('SupervisorAPI [V1 Endpoints]', () => {
 				.expect(sampleResponses.V1.POST['/update [204 Response]'].statusCode);
 			// Check that TargetState.update was called
 			expect(targetUpdateSpy).to.be.called;
-			expect(targetUpdateSpy).to.be.calledWith(undefined, true);
+			expect(targetUpdateSpy).to.be.calledWith(false, true);
 		});
 
 		it('returns 204 with force: true in body', async () => {

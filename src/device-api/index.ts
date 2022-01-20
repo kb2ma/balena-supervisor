@@ -89,6 +89,8 @@ export class SupervisorAPI {
 		this.api.use(express.urlencoded({ limit: '10mb', extended: true }));
 		this.api.use(express.json({ limit: '10mb' }));
 
+		this.api.use(middleware.inputValidator);
+
 		// And assign all external routers
 		for (const router of this.routers) {
 			this.api.use(router);
