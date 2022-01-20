@@ -33,7 +33,7 @@ export class SupervisorAPI {
 		this.healthchecks = healthchecks;
 
 		this.api.disable('x-powered-by');
-		this.api.use(middleware.apiLogger);
+		this.api.use(middleware.logging);
 
 		this.api.get('/v1/healthy', async (_req, res) => {
 			try {

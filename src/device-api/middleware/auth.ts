@@ -1,31 +1,8 @@
-import * as morgan from 'morgan';
-import * as _ from 'lodash';
+import * as config from '../../config';
+import { AuthorizedRequestHandler } from '../../types';
+import * as apiKeys from '../../lib/api-keys';
 
-import * as config from '../config';
-import * as apiKeys from '../lib/api-keys';
-import log from '../lib/supervisor-console';
-import { UpdatesLockedError } from '../lib/errors';
-
-import type { Request, Response, NextFunction } from 'express';
-import type { AuthorizedRequestHandler } from '../types';
-
-/**
- * Request logger
- */
-export const apiLogger = morgan(
-	(tokens, req, res) =>
-		[
-			tokens.method(req, res),
-			req.path,
-			tokens.status(req, res),
-			'-',
-			tokens['response-time'](req, res),
-			'ms',
-		].join(' '),
-	{
-		stream: { write: (d) => log.api(d.toString().trimRight()) },
-	},
-);
+import type { Request } from 'express';
 
 /**
  * API key validation & auth
@@ -99,43 +76,4 @@ export const auth: AuthorizedRequestHandler = async (req, res, next) => {
 		console.error(err);
 		res.status(503).send(`Unexpected error: ${err}`);
 	}
-};
-
-/**
- * Error handling
- */
-const messageFromError = (err?: Error | string | null): string => {
-	let message = 'Unknown error';
-	if (err != null) {
-		if (_.isError(err) && err.message != null) {
-			message = err.message;
-		} else {
-			message = err as string;
-		}
-	}
-	return message;
-};
-
-export const errorHandler = (
-	err: Error,
-	req: Request,
-	res: Response,
-	next: NextFunction,
-) => {
-	if (res.headersSent) {
-		// Error happens while we are writing the response - default handler closes the connection.
-		next(err);
-		return;
-	}
-
-	// Return 423 Locked when locks as set
-	const code = err instanceof UpdatesLockedError ? 423 : 503;
-	if (code !== 423) {
-		log.error(`Error on ${req.method} ${req.path}: `, err);
-	}
-
-	res.status(code).send({
-		status: 'failed',
-		message: messageFromError(err),
-	});
 };
