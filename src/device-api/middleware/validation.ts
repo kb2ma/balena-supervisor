@@ -131,7 +131,7 @@ const inputValidationSchema: {
 		required?: Array<RequiredValidationT | OneOfRequiredValidationT>;
 		optional?: OptionalValidationT[];
 	};
-} = {
+} = Object.freeze({
 	'POST /v1/restart': {
 		required: [
 			// One of two legacy endpoints that require appId in req.body
@@ -311,7 +311,7 @@ const inputValidationSchema: {
 			},
 		],
 	},
-};
+});
 
 /**
  * Input validation middleware
@@ -472,6 +472,28 @@ const handleLeft = (
 	return;
 };
 
+// List of routes that require a req.auth.isScoped check, returning 401 on fail. It would
+// be simpler to just have a `if (res.locals.appId && !req.auth.isScoped({ apps: [res.locals.appId] }))`
+// code block in inputValidator, but not all legacy routes require this scope check which
+// was an oversight but now we must maintain it.
+// TODO: This is a temporary implementation until we change how Supervisor API keys
+// are used.
+const routesRequiringScopeCheck = Object.freeze([
+	'POST /v1/restart',
+	'GET /v1/apps/:appId',
+	'POST /v1/purge',
+	'POST /v2/applications/:appId/restart-service',
+	'POST /v2/applications/:appId/stop-service',
+	'POST /v2/applications/:appId/start-service',
+	'POST /v2/applications/:appId/purge',
+	'POST /v2/applications/:appId/restart',
+	// NOTE: GET /v2/applications/:appId/state returns a 409 on out-of-scope error, which
+	// is incorrect but we have to maintain the interface. Thus it's not checked here.
+	// GET /v1/apps/:appId/start|stop are not added here because they will return other
+	// error messages before a 401 is ever reached, meaning this check will change
+	// existing interfaces.
+]);
+
 /**
  * Validates request inputs using io-ts and an input schema.
  */
@@ -514,8 +536,16 @@ export const inputValidator: AuthorizedRequestHandler = async (
 	}
 
 	// Check auth scope against decoded appId
-	if (res.locals.appId && !req.auth.isScoped({ apps: [res.locals.appId] })) {
+	if (
+		routesRequiringScopeCheck.includes(methodAndPath) &&
+		res.locals.appId &&
+		!req.auth.isScoped({ apps: [res.locals.appId] })
+	) {
 		// If not scoped, return auth error message
+		return res.status(401).json({
+			status: 'failed',
+			message: 'Application is not available',
+		});
 	}
 
 	// return next();

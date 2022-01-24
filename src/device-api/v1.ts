@@ -20,19 +20,10 @@ import * as commitStore from '../compose/commit';
 
 export const router = express.Router();
 
-router.post('/v1/restart', (req: AuthorizedRequest, res, next) => {
+router.post('/v1/restart', (_req: AuthorizedRequest, res, next) => {
 	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 	const { appId, force } = res.locals;
 	eventTracker.track('Restart container (v1)', { appId });
-
-	// handle the case where the appId is out of scope
-	if (!req.auth.isScoped({ apps: [appId] })) {
-		res.status(401).json({
-			status: 'failed',
-			message: 'Application is not available',
-		});
-		return;
-	}
 
 	return doRestart(appId, force)
 		.then(() => res.status(200).send('OK'))
@@ -138,7 +129,7 @@ router.post('/v1/shutdown', (req, res) =>
 	rebootOrShutdown(req, res, 'shutdown'),
 );
 
-router.get('/v1/apps/:appId', async (req: AuthorizedRequest, res, next) => {
+router.get('/v1/apps/:appId', async (_req: AuthorizedRequest, res, next) => {
 	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 	const { appId } = res.locals;
 	eventTracker.track('GET app (v1)', { appId });
@@ -149,15 +140,6 @@ router.get('/v1/apps/:appId', async (req: AuthorizedRequest, res, next) => {
 		const service = app?.services?.[0];
 		if (service == null) {
 			return res.status(400).send('App not found');
-		}
-
-		// handle the case where the appId is out of scope
-		if (!req.auth.isScoped({ apps: [app.appId] })) {
-			res.status(401).json({
-				status: 'failed',
-				message: 'Application is not available',
-			});
-			return;
 		}
 
 		if (app.services.length > 1) {
@@ -186,18 +168,9 @@ router.get('/v1/apps/:appId', async (req: AuthorizedRequest, res, next) => {
 	}
 });
 
-router.post('/v1/purge', (req: AuthorizedRequest, res, next) => {
+router.post('/v1/purge', (_req: AuthorizedRequest, res, next) => {
 	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 	const { appId, force } = res.locals;
-
-	// handle the case where the appId is out of scope
-	if (!req.auth.isScoped({ apps: [appId] })) {
-		res.status(401).json({
-			status: 'failed',
-			message: 'Application is not available',
-		});
-		return;
-	}
 
 	return doPurge(appId, force)
 		.then(() => res.status(200).json({ Data: 'OK', Error: '' }))

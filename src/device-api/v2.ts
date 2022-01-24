@@ -32,22 +32,13 @@ import * as messages from './messages';
 export const router = express.Router();
 
 const handleServiceAction = (
-	req: AuthorizedRequest,
+	_req: AuthorizedRequest,
 	res: Response,
 	next: NextFunction,
 	action: CompositionStepAction,
 ): Resolvable<void> => {
 	// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 	const { imageId, serviceName, appId, force } = res.locals;
-
-	// handle the case where the appId is out of scope
-	if (!req.auth.isScoped({ apps: [appId] })) {
-		res.status(401).json({
-			status: 'failed',
-			message: 'Application is not available',
-		});
-		return;
-	}
 
 	return Promise.all([applicationManager.getCurrentApps(), getApp(appId)])
 		.then(([apps, targetApp]) => {
@@ -103,18 +94,9 @@ const createServiceActionHandler = (action: string) =>
 
 router.post(
 	'/v2/applications/:appId/purge',
-	(req: AuthorizedRequest, res: Response, next: NextFunction) => {
+	(_req: AuthorizedRequest, res: Response, next: NextFunction) => {
 		// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 		const { appId, force } = res.locals;
-
-		// handle the case where the application is out of scope
-		if (!req.auth.isScoped({ apps: [appId] })) {
-			res.status(401).json({
-				status: 'failed',
-				message: 'Application is not available',
-			});
-			return;
-		}
 
 		return doPurge(appId, force)
 			.then(() => {
@@ -141,18 +123,9 @@ router.post(
 
 router.post(
 	'/v2/applications/:appId/restart',
-	(req: AuthorizedRequest, res: Response, next: NextFunction) => {
+	(_req: AuthorizedRequest, res: Response, next: NextFunction) => {
 		// Get validated input(s) which are stored in res.locals during middleware.inputValidator
 		const { appId, force } = res.locals;
-
-		// handle the case where the appId is out of scope
-		if (!req.auth.isScoped({ apps: [appId] })) {
-			res.status(401).json({
-				status: 'failed',
-				message: 'Application is not available',
-			});
-			return;
-		}
 
 		return doRestart(appId, force)
 			.then(() => {
@@ -270,15 +243,6 @@ router.get(
 				status: 'failed',
 				message: `Application ID does not exist: ${appId}`,
 			});
-		}
-
-		// handle the case where the appId is out of scope
-		if (!req.auth.isScoped({ apps: [appId] })) {
-			res.status(401).json({
-				status: 'failed',
-				message: 'Application is not available',
-			});
-			return;
 		}
 
 		// Filter applications we do not want
