@@ -9,11 +9,13 @@ import {
 	NumericIdentifier,
 	GenericBoolean,
 	DockerName,
+	withDefault,
+} from '../../types';
+import {
 	AuthorizedRequest,
 	AuthorizedRequestHandler,
 	HostConfig,
-	withDefault,
-} from '../../types';
+} from '../types';
 import log from '../../lib/supervisor-console';
 
 /**

@@ -8,7 +8,7 @@ import * as deviceState from '../../device-state';
 import * as TargetState from '../../device-state/target-state';
 import { getApp } from '../../device-state/db-format';
 import * as hostConfig from '../../host-config';
-import { AuthorizedRequest } from '../../types';
+import { AuthorizedRequest } from '../types';
 import { doRestart, doPurge } from '../common';
 
 import * as constants from '../../lib/constants';

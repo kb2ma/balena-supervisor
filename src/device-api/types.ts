@@ -2,7 +2,7 @@ import * as t from 'io-ts';
 import { chain, fold } from 'fp-ts/lib/Either';
 import { pipe } from 'fp-ts/function';
 
-import { fromEnum } from './basic';
+import { fromEnum } from '../types/basic';
 
 import type { Request, Response, NextFunction } from 'express';
 import type { ScopedResources, Scope } from '../lib/api-keys';

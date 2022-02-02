@@ -25,7 +25,7 @@ import { spawnJournalctl } from '../../lib/journald';
 import log from '../../lib/supervisor-console';
 import supervisorVersion = require('../../lib/supervisor-version');
 import { isVPNActive } from '../../network';
-import { AuthorizedRequest } from '../../types';
+import { AuthorizedRequest } from '../types';
 import { doPurge, doRestart, safeStateClone } from '../common';
 import * as messages from '../messages';
 
