@@ -548,6 +548,5 @@ export const inputValidator: AuthorizedRequestHandler = async (
 		});
 	}
 
-	// return next();
-	return res.status(200).send('OK');
+	return next();
 };

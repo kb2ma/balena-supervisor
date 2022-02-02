@@ -7,7 +7,7 @@ import { proxyvisor } from '../compose/application-manager';
 import blink = require('../lib/blink');
 import log from '../lib/supervisor-console';
 import * as apiKeys from '../lib/api-keys';
-import * as middleware from './middleware';
+import * as middlewares from './middlewares';
 
 import type { Server } from 'http';
 import type { AuthorizedRequest } from '../types';
@@ -33,7 +33,7 @@ export class SupervisorAPI {
 		this.healthchecks = healthchecks;
 
 		this.api.disable('x-powered-by');
-		this.api.use(middleware.logging);
+		this.api.use(middlewares.logging);
 
 		this.api.get('/v1/healthy', async (_req, res) => {
 			try {
@@ -51,7 +51,7 @@ export class SupervisorAPI {
 
 		this.api.get('/ping', (_req, res) => res.send('OK'));
 
-		this.api.use(middleware.auth);
+		this.api.use(middlewares.auth);
 
 		this.api.post('/v1/blink', (_req, res) => {
 			eventTracker.track('Device blink');
@@ -89,7 +89,7 @@ export class SupervisorAPI {
 		this.api.use(express.urlencoded({ limit: '10mb', extended: true }));
 		this.api.use(express.json({ limit: '10mb' }));
 
-		this.api.use(middleware.inputValidator);
+		this.api.use(middlewares.inputValidator);
 
 		// And assign all external routers
 		for (const router of this.routers) {
@@ -99,7 +99,7 @@ export class SupervisorAPI {
 		// TODO: When dependent devices are release-ready, this should be a separate module / service from the Supervisor
 		this.api.use(proxyvisor.router);
 
-		this.api.use(middleware.errorHandler);
+		this.api.use(middlewares.errorHandler);
 	}
 
 	public async listen(port: number, apiTimeout: number): Promise<void> {
