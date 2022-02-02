@@ -3,31 +3,31 @@ import * as express from 'express';
 import type { NextFunction, Response } from 'express';
 import * as _ from 'lodash';
 
-import * as deviceState from '../device-state';
-import * as apiBinder from '../api-binder';
-import * as applicationManager from '../compose/application-manager';
+import * as deviceState from '../../device-state';
+import * as apiBinder from '../../api-binder';
+import * as applicationManager from '../../compose/application-manager';
 import {
 	CompositionStepAction,
 	generateStep,
-} from '../compose/composition-steps';
-import { getApp } from '../device-state/db-format';
-import { Service } from '../compose/service';
-import Volume from '../compose/volume';
-import * as commitStore from '../compose/commit';
-import * as config from '../config';
-import * as db from '../db';
-import * as deviceConfig from '../device-config';
-import * as logger from '../logger';
-import * as images from '../compose/images';
-import * as volumeManager from '../compose/volume-manager';
-import * as serviceManager from '../compose/service-manager';
-import { spawnJournalctl } from '../lib/journald';
-import log from '../lib/supervisor-console';
-import supervisorVersion = require('../lib/supervisor-version');
-import { isVPNActive } from '../network';
-import { AuthorizedRequest } from '../types';
-import { doPurge, doRestart, safeStateClone } from './common';
-import * as messages from './messages';
+} from '../../compose/composition-steps';
+import { getApp } from '../../device-state/db-format';
+import { Service } from '../../compose/service';
+import Volume from '../../compose/volume';
+import * as commitStore from '../../compose/commit';
+import * as config from '../../config';
+import * as db from '../../db';
+import * as deviceConfig from '../../device-config';
+import * as logger from '../../logger';
+import * as images from '../../compose/images';
+import * as volumeManager from '../../compose/volume-manager';
+import * as serviceManager from '../../compose/service-manager';
+import { spawnJournalctl } from '../../lib/journald';
+import log from '../../lib/supervisor-console';
+import supervisorVersion = require('../../lib/supervisor-version');
+import { isVPNActive } from '../../network';
+import { AuthorizedRequest } from '../../types';
+import { doPurge, doRestart, safeStateClone } from '../common';
+import * as messages from '../messages';
 
 export const router = express.Router();
 

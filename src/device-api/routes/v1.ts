@@ -1,22 +1,22 @@
 import * as express from 'express';
 import * as _ from 'lodash';
 
-import * as eventTracker from '../event-tracker';
-import * as apiBinder from '../api-binder';
-import * as config from '../config';
-import * as deviceState from '../device-state';
-import * as TargetState from '../device-state/target-state';
-import { getApp } from '../device-state/db-format';
-import * as hostConfig from '../host-config';
-import { AuthorizedRequest } from '../types';
-import { doRestart, doPurge } from './common';
+import * as eventTracker from '../../event-tracker';
+import * as apiBinder from '../../api-binder';
+import * as config from '../../config';
+import * as deviceState from '../../device-state';
+import * as TargetState from '../../device-state/target-state';
+import { getApp } from '../../device-state/db-format';
+import * as hostConfig from '../../host-config';
+import { AuthorizedRequest } from '../../types';
+import { doRestart, doPurge } from '../common';
 
-import * as constants from '../lib/constants';
-import log from '../lib/supervisor-console';
-import { UpdatesLockedError } from '../lib/errors';
-import * as applicationManager from '../compose/application-manager';
-import { generateStep } from '../compose/composition-steps';
-import * as commitStore from '../compose/commit';
+import * as constants from '../../lib/constants';
+import log from '../../lib/supervisor-console';
+import { UpdatesLockedError } from '../../lib/errors';
+import * as applicationManager from '../../compose/application-manager';
+import { generateStep } from '../../compose/composition-steps';
+import * as commitStore from '../../compose/commit';
 
 export const router = express.Router();
 

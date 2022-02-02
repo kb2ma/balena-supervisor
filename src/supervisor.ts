@@ -5,8 +5,8 @@ import * as deviceState from './device-state';
 import * as eventTracker from './event-tracker';
 import * as logger from './logger';
 import SupervisorAPI from './device-api';
-import * as v1 from './device-api/v1';
-import * as v2 from './device-api/v2';
+import * as v1 from './device-api/routes/v1';
+import * as v2 from './device-api/routes/v2';
 import logMonitor from './logging/monitor';
 
 import { intialiseContractRequirements } from './lib/contracts';
