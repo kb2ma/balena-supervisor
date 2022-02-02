@@ -276,12 +276,12 @@ export type BooleanFromInt = t.TypeOf<typeof BooleanFromInt>;
  *
  * TODO: replace PermissiveBoolean in src/config/types.ts
  */
-export const BooleanIdentifier = new t.Type<
+export const GenericBoolean = new t.Type<
 	boolean,
 	BooleanFromString | BooleanFromInt | boolean,
 	unknown
 >(
-	'BooleanIdentifier',
+	'GenericBoolean',
 	t.boolean.is,
 	(i, c) =>
 		pipe(
@@ -300,4 +300,4 @@ export const BooleanIdentifier = new t.Type<
 		),
 	t.identity,
 );
-export type BooleanIdentifier = t.TypeOf<typeof BooleanIdentifier>;
+export type GenericBoolean = t.TypeOf<typeof GenericBoolean>;

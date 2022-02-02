@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import * as t from 'io-ts';
 import { isRight } from 'fp-ts/lib/Either';
 
-import { withDefault, BooleanIdentifier } from '../../../src/types';
+import { withDefault, GenericBoolean } from '../../../src/types';
 
 describe('types/basic', () => {
 	describe('withDefault', () => {
@@ -133,9 +133,9 @@ describe('types/basic', () => {
 		});
 	});
 
-	describe('BooleanIdentifier', () => {
+	describe('GenericBoolean', () => {
 		const decodeResultAccumulator = (accumulator: boolean, input: any) =>
-			accumulator && isRight(BooleanIdentifier.decode(input));
+			accumulator && isRight(GenericBoolean.decode(input));
 
 		it('should decode valid string booleans', () => {
 			const valid = ['true', '1', 'on', 'false', '0', 'off'];

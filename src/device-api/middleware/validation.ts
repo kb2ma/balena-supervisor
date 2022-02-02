@@ -7,7 +7,7 @@ import * as messages from '../messages';
 import * as config from '../../config';
 import {
 	NumericIdentifier,
-	BooleanIdentifier,
+	GenericBoolean,
 	DockerName,
 	AuthorizedRequest,
 	AuthorizedRequestHandler,
@@ -71,7 +71,7 @@ const appIdSchema: RequiredValidationT = {
 const forceSchema: OptionalValidationT = {
 	name: 'force',
 	location: 'body',
-	type: BooleanIdentifier,
+	type: GenericBoolean,
 	self: 'optional',
 	shouldDefault: (val) => val !== true,
 	getDefault: () => config.get('lockOverride'),
