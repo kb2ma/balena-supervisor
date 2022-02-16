@@ -1,4 +1,18 @@
 - commits:
+    - subject: Implement `SUPERVISOR_REPORT_INTERVAL` config var
+      hash: 7806a90d1c600f8acc25aac28a2fb9eab22366e3
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 12.12.0
+  title: "'Implement  config var'"
+  date: 2022-02-16T05:53:43.054Z
+- commits:
     - subject: Add support for local ipv6 reporting
       hash: 72f6cbe4c7225623ed99083d20c4a2cb2f3b70ac
       body: |
