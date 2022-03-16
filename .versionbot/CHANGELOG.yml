@@ -1,4 +1,18 @@
 - commits:
+    - subject: update packages for vulnerabilities
+      hash: b5a2b8b7510860ba926f2e015e9294c824c700e1
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 12.11.40
+  title: "'update packages for vulnerabilities'"
+  date: 2022-03-16T04:14:37.073Z
+- commits:
     - subject: Move report throttle out of reporting logic
       hash: 2fdb83839c2262b398deb77eb0fa4ae2c16c374a
       body: ""
