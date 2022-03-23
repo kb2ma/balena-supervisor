@@ -1,4 +1,18 @@
 - commits:
+    - subject: Use balenalib node base image
+      hash: 5513a9a0458a36a71f288fff7e0f739256a78346
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Thomas Manning <thomasm@balena.io>
+        signed-off-by: Thomas Manning <thomasm@balena.io>
+      author: Thomas Manning
+      nested: []
+  version: 12.11.44
+  title: "'patch: Live push starts node with '"
+  date: 2022-03-23T22:26:44.467Z
+- commits:
     - subject: Always add status to image download report
       hash: 21c1c006f7b8dfcf566f3e4a8e853e5e9978edf4
       body: |
