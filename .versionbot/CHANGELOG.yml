@@ -1,4 +1,19 @@
 - commits:
+    - subject: Remove restrictions on docker env vars
+      hash: 1d4614c9693818292f375f0fb887fba63e0b29cf
+      body: |
+        Docker doesn't impose any restrictions on the contents of an env
+        var, and neither does the CLI and API so it doesn't make much sense
+        for the env var to be as restrictive.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+      nested: []
+  version: 13.0.1
+  title: "'Remove restrictions on docker env vars'"
+  date: 2022-03-31T20:02:49.624Z
+- commits:
     - subject: Add support for GET v3 target state
       hash: 7425d1110b719dffd132c681c6e0c28fcc218dea
       body: |
