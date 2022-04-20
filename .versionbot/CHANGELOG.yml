@@ -1,4 +1,49 @@
 - commits:
+    - subject: Use HostConfig.Mounts to bind paths into container
+      hash: f226a355add29bd51a6bc11ad7e92b13e09635ee
+      body: >
+        When using the binds api the docker engine will auto-create the host
+
+        path as a directory if it doesn't exist. This can lead to unintended
+
+        side-effects when the source is a file (like when bind-mounting the
+
+        docker socket), as seen in the linked issue.
+
+
+        This also handles tmpfs and named volumes previously set without Mounts,
+
+        we take Config.Volumes and HostConfig.Tmpfs and
+
+        deduplicate over the full set.
+
+
+        To ensure containers managed by this Supervisor or newer run with the correct
+
+        HostConfig.Mounts config and not HostConfig.Binds, Bind configs are ignored
+
+        in favor of Mounts when comparing configs to ensure containers get
+
+        recreated as necessary. As a result of potential recreates which will happen
+
+        when self-serve upgrading to this Supervisor on a running device, this is
+
+        a semver major change.
+      footer:
+        Closes: "#1231"
+        closes: "#1231"
+        Change-type: major
+        change-type: major
+        Signed-off-by: Robert Günzler <robertg@balena.io>
+        signed-off-by: Robert Günzler <robertg@balena.io>
+        Co-authored-by: Christina Wang <christina@balena.io>
+        co-authored-by: Christina Wang <christina@balena.io>
+      author: Robert Günzler
+      nested: []
+  version: 14.0.0
+  title: "'Use mount instead of binds to bind mount paths into the container'"
+  date: 2022-04-20T22:44:22.300Z
+- commits:
     - subject: Remove in memory storage of started/stopped containers
       hash: 5437aea786e6be4a908e2cb0c24faeca3282c37e
       body: ""
