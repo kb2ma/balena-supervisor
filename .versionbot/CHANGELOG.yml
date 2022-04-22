@@ -1,4 +1,18 @@
 - commits:
+    - subject: Added `BALENA_SUPERVISOR_REPORT_INTERVAL` config
+      hash: 948107b65e6e484591d190610c0286bbed3ce075
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 13.2.0
+  title: "'Added  config'"
+  date: 2022-04-22T20:52:24.309Z
+- commits:
     - subject: Remove in memory storage of started/stopped containers
       hash: 5437aea786e6be4a908e2cb0c24faeca3282c37e
       body: ""
