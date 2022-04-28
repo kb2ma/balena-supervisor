@@ -1,4 +1,18 @@
 - commits:
+    - subject: Only throttle HTTP request when reporting state
+      hash: ee03cd1604cc14ea1877cbdc44f1d5bec3bbd9fe
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 13.1.4
+  title: "'Only throttle HTTP request when reporting state'"
+  date: 2022-04-28T15:23:59.130Z
+- commits:
     - subject: Remove in memory storage of started/stopped containers
       hash: 5437aea786e6be4a908e2cb0c24faeca3282c37e
       body: ""
