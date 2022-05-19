@@ -1,4 +1,21 @@
 - commits:
+    - subject: Do not stop containers on reboot/shutdown This causes unless-stopped
+        containers to not start on next boot since the Supervisor stopped it.
+      hash: 4f1d0d58da29336d38be758eb8a64b434cf8d546
+      body: ""
+      footer:
+        Closes: "#1940"
+        closes: "#1940"
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 13.1.9
+  title: "'Do not stop containers on reboot/shutdown'"
+  date: 2022-05-19T20:18:21.418Z
+- commits:
     - subject: Add compose support for volumes defined with long syntax
       hash: 0a9c7282e8921f874315259919ba247236be5d52
       body: >
