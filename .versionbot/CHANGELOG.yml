@@ -1,4 +1,20 @@
 - commits:
+    - subject: Check for deferred reports after reporting current state
+      hash: b9a905e472eca14b8891b207a5ccc8d6cc4c45cf
+      body: ""
+      footer:
+        Closes: "#1945"
+        closes: "#1945"
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 14.1.0
+  title: "'Check for deferred reports after reporting current state'"
+  date: 2022-06-10T18:20:47.117Z
+- commits:
     - subject: Use locks before shutdown/reboot instead of stopping containers
       hash: aad5a9efc5da5ffcd6915ac6f395e154ee38cbf8
       body: ""
