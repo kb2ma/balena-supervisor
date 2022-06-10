@@ -1,4 +1,22 @@
 - commits:
+    - subject: Use throttle for reporting state This ensures that a trailing call is
+        executed as well as ensuring the throttle function is only ran within
+        the allowed frequency
+      hash: 40b809571cadc5614825e1c90a6144f05d5686c9
+      body: ""
+      footer:
+        Closes: "#1945"
+        closes: "#1945"
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 14.1.0
+  title: "'2 defer in progress report'"
+  date: 2022-06-10T18:12:12.394Z
+- commits:
     - subject: Use locks before shutdown/reboot instead of stopping containers
       hash: aad5a9efc5da5ffcd6915ac6f395e154ee38cbf8
       body: ""
