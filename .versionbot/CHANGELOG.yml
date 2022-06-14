@@ -1,4 +1,23 @@
 - commits:
+    - subject: Use throttle module for reporting current state This simplifies the
+        logic of throttling reports plus adds the benefit of allowing reports
+        requested during a pending report to still be called after the pending
+        report completes.
+      hash: e28b3be33dacc2f97287dd458e28d28d028bbc7c
+      body: ""
+      footer:
+        Closes: "#1945"
+        closes: "#1945"
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 14.1.0
+  title: "'Use throttle module for reporting current state'"
+  date: 2022-06-14T23:05:17.117Z
+- commits:
     - subject: Better document mocked-dbus, add missing dbus interface methods
       hash: ffa1c734182f49fabc818c95f3a1c231bf4e05f4
       body: ""
