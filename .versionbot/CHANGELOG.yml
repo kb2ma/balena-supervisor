@@ -1,4 +1,26 @@
 - commits:
+    - subject: Use compose long syntax for /lib/firmware and /lib/modules
+      hash: 7531685b4fc7d3e9da271bf8c6de65540df5647a
+      body: >
+        As /lib/firmware and /lib/modules are always expected to be in the host
+
+        filesystem, using long syntax ensures that the Supervisor container
+
+        cannot start on an invalid host. (Long syntax volumes error when the host
+
+        path does not exist, whereas short syntax volumes create the host path.)
+      footer:
+        Change-type: major
+        change-type: major
+        Closes: "#1965"
+        closes: "#1965"
+        Signed-off-by: Christina Wang <christina@balena.io>
+        signed-off-by: Christina Wang <christina@balena.io>
+      author: Christina Wang
+      nested: []
+  version: 15.0.0
+  date: 2022-06-14T18:04:33.619Z
+- commits:
     - subject: Better document mocked-dbus, add missing dbus interface methods
       hash: ffa1c734182f49fabc818c95f3a1c231bf4e05f4
       body: ""
