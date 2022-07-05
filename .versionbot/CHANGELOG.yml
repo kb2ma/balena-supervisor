@@ -1,4 +1,16 @@
 - commits:
+    - subject: Use fatrw binary to read/write from boot partition
+      hash: c6f5af1fd9434e796bcb3ba42ff00b1568f29895
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+      nested: []
+  version: 14.0.9
+  title: "'Use fatrw for writes to /mnt/boot'"
+  date: 2022-07-05T21:51:29.670Z
+- commits:
     - subject: Specify that Supervisor will not restore previous lock status from user
         containers
       hash: ca140639c6a2b5f9f5a2e69b5611bb3902b78c18
