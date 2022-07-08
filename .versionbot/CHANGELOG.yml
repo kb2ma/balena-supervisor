@@ -1,4 +1,23 @@
 - commits:
+    - subject: Use p-throttle module for reporting current state This simplifies the
+        logic of throttling reports plus adds the benefit of allowing reports
+        requested during a pending report to still be called after the pending
+        report completes.
+      hash: d212ba7d15402e20b2476c18f6846e1c34f68c8b
+      body: ""
+      footer:
+        Closes: "#1945"
+        closes: "#1945"
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+        signed-off-by: 20k-ultra <3946250+20k-ultra@users.noreply.github.com>
+      author: 20k-ultra
+      nested: []
+  version: 14.1.0
+  title: "'Allow backOff to abort throttle'"
+  date: 2022-07-08T21:42:02.732Z
+- commits:
     - subject: Allow host config patch regardless of running applications
       hash: 0fc79e87d98e13c2c918ec89e28759447c51af56
       body: |
