@@ -1,4 +1,24 @@
 - commits:
+    - subject: Allow directories to be used as lockfiles
+      hash: 861e902d7f460e9ed0320ff2f808d23ec53e4e30
+      body: >
+        Some libraries, like
+        [proper-lockfile](https://www.npmjs.com/package/proper-lockfile)
+
+        use directories instead of files for locking. This PR allows the supervisor to be able to
+
+        work with those types of locks when lock override is requested.
+      footer:
+        Closes: "#1978"
+        closes: "#1978"
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+      nested: []
+  version: 14.0.10
+  title: "'Allow directories to be used as lockfiles'"
+  date: 2022-07-13T18:54:57.325Z
+- commits:
     - subject: Allow host config patch regardless of running applications
       hash: 0fc79e87d98e13c2c918ec89e28759447c51af56
       body: |
