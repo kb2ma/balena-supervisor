@@ -549,7 +549,6 @@ export let balenaApi: PinejsClientRequest | null = null;
 
 export const initialized = (async () => {
 	await config.initialized;
-	await eventTracker.initialized;
 	await deviceState.initialized;
 
 	const { unmanaged, apiEndpoint, currentApiKey } = await config.getMany([

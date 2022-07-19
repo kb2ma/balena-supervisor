@@ -154,7 +154,6 @@ export const provision = async (
 	opts: KeyExchangeOpts,
 ) => {
 	await config.initialized;
-	await eventTracker.initialized;
 
 	let device: Device | null = null;
 
