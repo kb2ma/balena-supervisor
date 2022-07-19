@@ -1,4 +1,23 @@
 - commits:
+    - subject: Disable event tracking
+      hash: 7394df5a4b0674c8bd2d493c7ec051bb0e97ff8d
+      body: |
+        The supervisor used to rely on specific event reporting for identifying
+        issues at runtime. As the platform has grown, it has become much more
+        difficult to get any signal from the event noise. Recently the API side
+        for these events has been disabled, meaning these events only
+        contribute to bandwidth consumption.  This commit disables the
+        event reporting feature of the supervisor which will be most likely
+        replaced by something like Sentry in the near future.
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Felipe Lalanne
+      nested: []
+  version: 14.1.0
+  title: "'Disable event tracking'"
+  date: 2022-07-19T17:48:57.533Z
+- commits:
     - subject: Disable healthchecks failing on report errors
       hash: 0c4e6ce4217fa17bd345483f61b27c1073327fef
       body: |
