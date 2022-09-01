@@ -1,4 +1,18 @@
 - commits:
+    - subject: Allow most printable ASCII chars for service label key
+      hash: e72dfda81842a54f24c0f13ee21a7f0a23de468d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ken Bannister <kb2ma@runbox.com>
+        signed-off-by: Ken Bannister <kb2ma@runbox.com>
+      author: Ken Bannister
+      nested: []
+  version: 14.0.16
+  title: "'Allow most printable ASCII chars for service label key'"
+  date: 2022-09-01T01:51:12.710Z
+- commits:
     - subject: Create `test/unit` and `test/integration` folders
       hash: c1e6dadeb47c3c52958383a2fc775a821362f853
       body: |
