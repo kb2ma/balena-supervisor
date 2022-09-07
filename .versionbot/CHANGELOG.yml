@@ -8,8 +8,8 @@
       author: Thodoris Greasidis
       nested: []
   version: 14.0.18
-  title: "'Set desired es-version for downstream modules that support it'"
-  date: 2022-09-07T15:42:42.655Z
+  title: "'Bump thenify from 3.3.0 to 3.3.1'"
+  date: 2022-09-07T15:53:59.539Z
 - commits:
     - subject: Remove side effects for module imports
       hash: 48e0733c7e734b401f6072df5a396dfc04075d98
