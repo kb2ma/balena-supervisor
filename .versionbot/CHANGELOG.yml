@@ -1,4 +1,29 @@
 - commits:
+    - subject: Add bind-mount label
+      hash: b287f23112f0f57ee78368769d6d5976b58aa6db
+      body: >
+        A label which adds a `/bind-mount` folder into the container, bind
+        mounted to empty directory `/mnt/data/bind-mount` on the host (creates
+        directories if they do not exist).
+
+
+        By preventing users from bind mounting to the host we have prevented some features that require bind mounts to work, such as sharing a mounted USB drive between two or more containers (https://www.balena.io/docs/learn/develop/runtime/#mounting-external-storage-media) or other mounts such as LUKs mounts etc.
+
+
+        This proposal is distinct from some other proposals (https://github.com/balena-os/balena-supervisor/issues/1532) which specifically target a single feature such as USB mounting. It instead aims to provide a non-prescriptive bind-mount option back to users for various use cases without needing to remove any write protections from the OS.
+
+
+        Closes: https://github.com/balena-io/balena-io/issues/1288
+
+        Closes: https://github.com/balena-os/balena-supervisor/issues/643
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: maggie0002
+      nested: []
+  version: 14.1.0
+  date: 2022-09-07T09:15:14.092Z
+- commits:
     - subject: Wait for Stopping services to stop before target apply success
       hash: 12b67742c8091280c2e74e97a7c7392021db542f
       body: >
