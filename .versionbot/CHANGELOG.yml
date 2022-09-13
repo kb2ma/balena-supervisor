@@ -1,4 +1,21 @@
 - commits:
+    - subject: Split compose/volume tests into unit/integration
+      hash: 321dad44c33025d8af4b6cd82f681a14ff8e4933
+      body: |
+        This also needs to modify the test environment as database migrations
+        will look for `config.json` in the location given by the variable
+        `CONFIG_MOUNT_POINT`.
+
+        The volume tests now run against the actual docker engine setup via dind
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Felipe Lalanne
+      nested: []
+  version: 14.0.22
+  title: "'Refactor supervisor tests that modify files on the OS'"
+  date: 2022-09-13T20:48:09.190Z
+- commits:
     - subject: Fix withDefault type helper to work with boolean
       hash: 3e45e9561e109186ea038c6d3b67f54071ee8a67
       body: |

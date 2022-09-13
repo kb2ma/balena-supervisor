@@ -1,7 +1,7 @@
 {
   "name": "balena-supervisor",
   "description": "This is balena's Supervisor, a program that runs on IoT devices and has the task of running user Apps (which are Docker containers), and updating them as the balena API informs it to.",
-  "version": "14.0.21",
+  "version": "14.0.22",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -13,8 +13,8 @@
     "lint": "balena-lint -e ts -e js --typescript src/ test/ typings/ build-utils/ webpack.config.js",
     "test:build": "tsc --noEmit && tsc --noEmit --project tsconfig.js.json",
     "test:unit": "mocha --config test/unit/.mocharc.js",
-		"test:integration": "find test/integration -name *.spec.ts | xargs -n 1 -I {} sh -c 'mocha --config test/integration/.mocharc.js {} || exit 255'",
-		"test:integration:single": "mocha --config test/integration/.mocharc.js test/integration/**/*.spec.ts",
+    "test:integration": "find test/integration -name *.spec.ts | xargs -n 1 -I {} sh -c 'mocha --config test/integration/.mocharc.js {} || exit 255'",
+    "test:integration:single": "mocha --config test/integration/.mocharc.js test/integration/**/*.spec.ts",
     "test:legacy": "mocha --config test/legacy/.mocharc.js",
     "test:node": "npm run test:unit && npm run test:integration && npm run test:legacy",
     "test:env": "docker-compose -f docker-compose.test.yml -f docker-compose.dev.yml up --build; npm run compose:down",
@@ -142,6 +142,6 @@
     }
   },
   "versionist": {
-    "publishedAt": "2022-09-13T20:13:18.516Z"
+    "publishedAt": "2022-09-13T20:48:09.601Z"
   }
 }
