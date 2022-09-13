@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update to nodejs 14
+      hash: 41c499dcd03751f0722dc0bc4046fb516658868d
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+      nested: []
+  version: 14.0.20
+  title: "'Update to nodejs 14'"
+  date: 2022-09-13T18:48:02.500Z
+- commits:
     - subject: Update blinking to 0.0.5
       hash: 45f71b38d0a69419fae19e9c1a628d023653fad5
       body: ""
