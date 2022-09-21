@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add support for variable substitution in service configuration
+      hash: 5b199af8eb32eb160fee2765c033ba422b5586c5
+      body: >
+        This adds the ability for the Supervisor to interpolate variables in
+        service configuration with values specified remotely via fleet, device
+        and/or service environment variables.
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Akis Kesoglou
+      nested: []
+  version: 14.3.0
+  date: 2022-09-21T16:20:15.483Z
+- commits:
     - subject: Disable event tracking
       hash: e00687408ce9c1b20217f25b1c906b7855aab83f
       body: |
