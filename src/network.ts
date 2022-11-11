@@ -1,5 +1,5 @@
-import * as Bluebird from 'bluebird';
-import * as _ from 'lodash';
+import Bluebird from 'bluebird';
+import _ from 'lodash';
 import { promises as fs, watch } from 'fs';
 import * as networkCheck from 'network-checker';
 import * as os from 'os';
@@ -9,7 +9,7 @@ import * as constants from './lib/constants';
 import { EEXIST } from './lib/errors';
 import { checkFalsey } from './lib/validation';
 
-import blink = require('./lib/blink');
+import blink from './lib/blink';
 
 import log from './lib/supervisor-console';
 
