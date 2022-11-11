@@ -1,5 +1,5 @@
 import { strict as assert } from 'assert';
-import { promisify } from 'util';
+import { setTimeout } from 'timers/promises';
 
 export type OnFailureInfo = {
 	failures: number;
@@ -38,9 +38,6 @@ export function withBackoff<T extends (...args: any[]) => any>(
 	// otherwise use the actual return
 	type TReturn = ReturnType<T> extends Promise<infer R> ? R : ReturnType<T>;
 
-	// TODO use standard lib async setTimout (requires node 16)
-	const sleep = promisify(setTimeout);
-
 	const normalizedOptions: Options = {
 		...DEFAULT_OPTIONS,
 		...options,
@@ -74,7 +71,7 @@ export function withBackoff<T extends (...args: any[]) => any>(
 				});
 			}
 
-			await sleep(wait);
+			await setTimeout(wait);
 
 			return wrapped(...args);
 		}
