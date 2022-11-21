@@ -54,7 +54,7 @@ describe('db', () => {
 	});
 
 	it('creates a database at the path passed on creation', async () => {
-		const testDb = await import('~/src/db');
+		const testDb = require('~/src/db') as typeof import('~/src/db');
 		await testDb.initialized();
 		await expect(fs.access(constants.databasePath)).to.not.be.rejected;
 	});
@@ -62,7 +62,7 @@ describe('db', () => {
 	it('migrations add new fields and removes old ones in an old database', async () => {
 		// Create a database with an older schema
 		const knexForDB = await createOldDatabase(constants.databasePath);
-		const testDb = await import('~/src/db');
+		const testDb = require('~/src/db') as typeof import('~/src/db');
 		await testDb.initialized();
 		await Bluebird.all([
 			expect(knexForDB.schema.hasColumn('app', 'appId')).to.eventually.be.true,
@@ -88,7 +88,7 @@ describe('db', () => {
 	});
 
 	it('creates a deviceConfig table with a single default value', async () => {
-		const testDb = await import('~/src/db');
+		const testDb = require('~/src/db') as typeof import('~/src/db');
 		await testDb.initialized();
 		const deviceConfig = await testDb.models('deviceConfig').select();
 		expect(deviceConfig).to.have.lengthOf(1);
@@ -96,7 +96,7 @@ describe('db', () => {
 	});
 
 	it('allows performing transactions', async () => {
-		const testDb = await import('~/src/db');
+		const testDb = require('~/src/db') as typeof import('~/src/db');
 		await testDb.initialized();
 		return testDb.transaction((trx) => expect(trx.commit()).to.be.fulfilled);
 	});
