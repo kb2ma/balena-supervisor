@@ -1,4 +1,19 @@
 - commits:
+    - subject: Fix container name creation to generate valid DNS hostnames
+      hash: b706ca5d5b1bc159d41585649d7d1c356221fe9e
+      body: |
+        Fixes #2077
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ramiro Gonzalez <ramiro.gonzalez@balena.io>
+        signed-off-by: Ramiro Gonzalez <ramiro.gonzalez@balena.io>
+      author: Ramiro González Maciel
+      nested: []
+  version: 14.4.7
+  title: ""
+  date: 2022-12-12T16:29:54.561Z
+- commits:
     - subject: Make readFromBoot behave more like Node readFile
       hash: 0605e996c9225380e39fd78b1c99cc7ad3c0f959
       body: >
