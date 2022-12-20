@@ -1,4 +1,28 @@
 - commits:
+    - subject: Create mechanism to read files from host /
+      hash: 9f8b87781940aa715f342760f90ed5071d0aebfc
+      body: |
+        The supervisor needs to read some files from the host root since there
+        are no alternative interfaces that the host provides. These files are
+
+        - /etc/os-release to read the OS version
+        - /run/openvpn/vpn_status/active to check the VPN status
+
+        While we are working to introduce alternative interfaces for reading the
+        information provided by these files, the supervisor still needs a
+        backwards compatible way to get that info.
+
+        This PR uses the fact that the supervisor has access to the docker
+        socket to mount a file into a container and read the file from there.
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Felipe Lalanne
+      nested: []
+  version: 14.5.0
+  title: ""
+  date: 2022-12-20T13:46:57.553Z
+- commits:
     - subject: Use `got` for fetching the target state in order to have brotli support
       hash: fd135214fe4c1c365ce8e2d67f272bd824adb1dd
       body: ""
