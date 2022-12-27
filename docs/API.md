@@ -1293,11 +1293,11 @@ $ curl -X POST -H "Content-Type: application/json" --data '{"follow":true,"all":
 
 ##### since: number
 > **Introduced in supervisor v14.5**
-Start showing entries on or newer than the specified unix epoch timestamp.
+Start showing entries on or newer than the specified UNIX timestamp in milliseconds.
 
 ##### until: number
 > **Introduced in supervisor v14.5**
-Show entries no older than the specified unix epoch timestamp.
+Show entries no older than the specified UNIX timestamp in milliseconds.
 
 An example project using this endpoint can be found
 [in this repository](https://github.com/balena-io-playground/device-cloud-logging).
