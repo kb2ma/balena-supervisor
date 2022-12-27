@@ -583,6 +583,8 @@ router.post('/v2/journal-logs', (req, res) => {
 	const unit = req.body.unit;
 	const format = req.body.format || 'short';
 	const containerId = req.body.containerId;
+	const since = req.body.since;
+	const until = req.body.until;
 
 	const journald = spawnJournalctl({
 		all,
@@ -591,6 +593,8 @@ router.post('/v2/journal-logs', (req, res) => {
 		unit,
 		format,
 		containerId,
+		since,
+		until,
 	});
 	res.status(200);
 	// We know stdout will be present

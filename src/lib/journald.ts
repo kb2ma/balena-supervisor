@@ -2,6 +2,13 @@ import { ChildProcess, spawn } from 'child_process';
 
 import log from './supervisor-console';
 
+function toJournalctlDate(epoch: number) {
+	return new Date(epoch)
+		.toISOString()
+		.replace(/T/, ' ') // replace T with a space
+		.replace(/\..+/, ''), // delete the dot and everything after
+}
+
 export function spawnJournalctl(opts: {
 	all: boolean;
 	follow: boolean;
@@ -11,6 +18,7 @@ export function spawnJournalctl(opts: {
 	format: string;
 	filterString?: string;
 	since?: number;
+	until?: number;
 }): ChildProcess {
 	const args: string[] = [];
 	if (opts.all) {
@@ -34,10 +42,13 @@ export function spawnJournalctl(opts: {
 	if (opts.since != null) {
 		args.push('-S');
 		args.push(
-			new Date(opts.since)
-				.toISOString()
-				.replace(/T/, ' ') // replace T with a space
-				.replace(/\..+/, ''), // delete the dot and everything after
+			toJournalctlDate(opts.since)
+		);
+	}
+	if (opts.until != null) {
+		args.push('-U');
+		args.push(
+			toJournalctlDate(opts.until)
 		);
 	}
 	args.push('-o');
