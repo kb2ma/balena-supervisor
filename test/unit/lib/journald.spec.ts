@@ -51,8 +51,6 @@ describe('lib/journald', () => {
 		const actualCommand = spawn.firstCall.args[0];
 		const actualOptionalArgs = spawn.firstCall.args[1];
 
-		console.log(JSON.stringify(actualOptionalArgs));
-
 		expect(spawn.calledOnce).to.be.true;
 
 		expect(actualCommand).deep.equal(expectedCommand);
