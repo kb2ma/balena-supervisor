@@ -1291,5 +1291,13 @@ From an app container:
 $ curl -X POST -H "Content-Type: application/json" --data '{"follow":true,"all":true}' "$BALENA_SUPERVISOR_ADDRESS/v2/journal-logs?apikey=$BALENA_SUPERVISOR_API_KEY" > log.journal
 ```
 
+##### since: number
+> **Introduced in supervisor v14.5**
+Start showing entries on or newer than the specified unix epoch timestamp.
+
+##### until: number
+> **Introduced in supervisor v14.5**
+Show entries no older than the specified unix epoch timestamp.
+
 An example project using this endpoint can be found
 [in this repository](https://github.com/balena-io-playground/device-cloud-logging).
