@@ -2,11 +2,11 @@ import { ChildProcess, spawn } from 'child_process';
 
 import log from './supervisor-console';
 
-function toJournalctlDate(epoch: number) {
+function toJournalctlDate(epoch: number): string {
 	return new Date(epoch)
 		.toISOString()
 		.replace(/T/, ' ') // replace T with a space
-		.replace(/\..+/, ''), // delete the dot and everything after
+		.replace(/\..+/, '') // delete the dot and everything after
 }
 
 export function spawnJournalctl(opts: {
