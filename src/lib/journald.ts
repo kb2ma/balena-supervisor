@@ -6,7 +6,7 @@ function toJournalctlDate(epoch: number): string {
 	return new Date(epoch)
 		.toISOString()
 		.replace(/T/, ' ') // replace T with a space
-		.replace(/\..+/, '') // delete the dot and everything after
+		.replace(/\..+/, ''); // delete the dot and everything after
 }
 
 export function spawnJournalctl(opts: {
@@ -41,15 +41,11 @@ export function spawnJournalctl(opts: {
 	}
 	if (opts.since != null) {
 		args.push('-S');
-		args.push(
-			toJournalctlDate(opts.since)
-		);
+		args.push(toJournalctlDate(opts.since));
 	}
 	if (opts.until != null) {
 		args.push('-U');
-		args.push(
-			toJournalctlDate(opts.until)
-		);
+		args.push(toJournalctlDate(opts.until));
 	}
 	args.push('-o');
 	args.push(opts.format);
