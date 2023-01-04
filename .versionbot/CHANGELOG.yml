@@ -1,4 +1,16 @@
 - commits:
+    - subject: "patch: Migrate Supervisor Debugging docs from masterclass"
+      hash: 07ecb526b07e03d8ab422463c2f38f8ef1be10f5
+      body: ""
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 14.4.11
+  title: ""
+  date: 2023-01-04T21:07:00.484Z
+- commits:
     - subject: "Docs: clarify that Supervisor creates lockfiles as nobody UID"
       hash: 3a824448faec04fd139ceb9cbedc327ced117bf8
       body: ""
