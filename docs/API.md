@@ -1291,13 +1291,15 @@ From an app container:
 $ curl -X POST -H "Content-Type: application/json" --data '{"follow":true,"all":true}' "$BALENA_SUPERVISOR_ADDRESS/v2/journal-logs?apikey=$BALENA_SUPERVISOR_API_KEY" > log.journal
 ```
 
-##### since: number
+##### since: string
 > **Introduced in supervisor v14.5**
-Start showing entries on or newer than the specified UNIX timestamp in milliseconds.
+Show journal logs since the given `since` timestamp, formats are described here:
+[https://www.freedesktop.org/software/systemd/man/journalctl.html#-S](https://www.freedesktop.org/software/systemd/man/journalctl.html#-S)
 
-##### until: number
+##### until: string
 > **Introduced in supervisor v14.5**
-Show entries no older than the specified UNIX timestamp in milliseconds.
+Show journal logs until the given `until` timestamp, formats are described here:
+[https://www.freedesktop.org/software/systemd/man/journalctl.html#-S](https://www.freedesktop.org/software/systemd/man/journalctl.html#-S)
 
 An example project using this endpoint can be found
 [in this repository](https://github.com/balena-io-playground/device-cloud-logging).
