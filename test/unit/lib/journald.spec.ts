@@ -26,8 +26,8 @@ describe('lib/journald', () => {
 			unit: 'nginx.service',
 			containerId: 'abc123',
 			format: 'json-pretty',
-			since: 1671544323000,
-			until: 1671544423000,
+			since: '2014-03-25 03:59:56.654563',
+			until: '2014-03-25 03:59:59.654563',
 		});
 
 		const expectedCommand = `journalctl`;
@@ -43,9 +43,9 @@ describe('lib/journald', () => {
 			'-o',
 			'json-pretty',
 			'-S',
-			'2022-12-20 13:52:03',
+			'2014-03-25 03:59:56.654563',
 			'-U',
-			'2022-12-20 13:53:43',
+			'2014-03-25 03:59:59.654563',
 		];
 
 		const actualCommand = spawn.firstCall.args[0];
