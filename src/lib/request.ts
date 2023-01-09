@@ -72,6 +72,7 @@ const getRequestInstances = once(async () => {
 	got.extend({
 		responseType: 'json',
 		decompress: true,
+		http2: true,
 		timeout: {
 			// TODO: We use the same default timeout for all of these in order to have a timeout generally
 			// but it would probably make sense to tune them individually
