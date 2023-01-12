@@ -1297,7 +1297,7 @@ Show journal logs since the given `since` timestamp, formats are described here:
 [https://www.freedesktop.org/software/systemd/man/journalctl.html#-S](https://www.freedesktop.org/software/systemd/man/journalctl.html#-S)
 
 ##### until: string
-> **Introduced in supervisor v14.5.0
+> **Introduced in supervisor v14.5.0**
 Show journal logs until the given `until` timestamp, formats are described here:
 [https://www.freedesktop.org/software/systemd/man/journalctl.html#-S](https://www.freedesktop.org/software/systemd/man/journalctl.html#-S)
 
