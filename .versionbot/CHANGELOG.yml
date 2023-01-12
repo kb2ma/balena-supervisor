@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add return type
+      hash: 115179297dc4277afe9fabd4cf7a0804900496d3
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Ruben Keulemans <ruben.keulemans@protonmail.com>
+        signed-off-by: Ruben Keulemans <ruben.keulemans@protonmail.com>
+      author: Ruben Keulemans
+      nested: []
+  version: 14.5.0
+  title: ""
+  date: 2023-01-12T07:48:01.975Z
+- commits:
     - subject: "Docs: clarify that Supervisor creates lockfiles as nobody UID"
       hash: 3a824448faec04fd139ceb9cbedc327ced117bf8
       body: ""
