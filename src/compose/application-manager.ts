@@ -350,6 +350,7 @@ export async function getCurrentApps(): Promise<InstancedAppState> {
 				);
 
 				s.imageName = imageForService?.name ?? s.imageName;
+				s.releaseId = imageForService?.releaseId ?? s.releaseId;
 				return s;
 			});
 
@@ -695,7 +696,10 @@ function saveAndRemoveImages(
 		availableWithoutIds,
 		(image) =>
 			!_.some(currentImages.concat(targetImages), (imageInUse) => {
-				return _.isEqual(image, _.omit(imageInUse, ['dockerImageId', 'id']));
+				return _.isEqual(
+					_.omit(image, ['releaseId']),
+					_.omit(imageInUse, ['dockerImageId', 'id', 'releaseId']),
+				);
 			}),
 	);
 
@@ -840,10 +844,18 @@ export async function getLegacyState() {
 		if (apps[appId].services == null) {
 			apps[appId].services = {};
 		}
+
+		// Get releaseId from the list of images if it can be found
+		service.releaseId = images.find(
+			(img) =>
+				img.serviceName === service.serviceName &&
+				img.commit === service.commit,
+		)?.releaseId;
+
 		// We only send commit if all services have the same release, and it matches the target release
 		if (releaseId == null) {
-			({ releaseId } = service);
-		} else if (releaseId !== service.releaseId) {
+			releaseId = service.releaseId;
+		} else if (service.releaseId != null && releaseId !== service.releaseId) {
 			releaseId = false;
 		}
 		if (imageId == null) {

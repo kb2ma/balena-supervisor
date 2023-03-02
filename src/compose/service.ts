@@ -56,7 +56,12 @@ export class Service {
 	public config: ServiceConfig;
 	public serviceName: string;
 	public commit: string;
-	public releaseId: number;
+	/**
+	 * We make this available as it still needed by application manager
+	 * but it is only available on the target state
+	 * @deprecated
+	 */
+	public releaseId?: number;
 	public serviceId: number;
 	public imageName: string | null;
 	public containerId: string | null;
@@ -617,10 +622,10 @@ export class Service {
 				'Attempt to build Service class from container with malformed labels',
 			);
 		}
-		const nameMatch = container.Name.match(/.*_(\d+)_(\d+)(?:_(.*?))?$/);
+		const nameMatch = container.Name.match(/.*_(\d+)(?:_(\d+))?(?:_(.*?))?$/);
 		if (nameMatch == null) {
 			throw new InternalInconsistencyError(
-				`Expected supervised container to have name '<serviceName>_<imageId>_<releaseId>_<commit>', got: ${container.Name}`,
+				`Expected supervised container to have name '<serviceName>_<imageId>_<commit>', got: ${container.Name}`,
 			);
 		}
 
@@ -674,7 +679,7 @@ export class Service {
 			this.config.networkMode = `container:${containerId}`;
 		}
 		return {
-			name: `${this.serviceName}_${this.imageId}_${this.releaseId}_${this.commit}`,
+			name: `${this.serviceName}_${this.imageId}_${this.commit}`,
 			Tty: this.config.tty,
 			Cmd: this.config.command,
 			Volumes: volumes,
