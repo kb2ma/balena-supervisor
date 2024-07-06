@@ -20,12 +20,19 @@ export const ProxyConfig = t.intersection([
 ]);
 export type ProxyConfig = t.TypeOf<typeof ProxyConfig>;
 
+export const DnsConfig = t.type({
+	remote_ip: t.string,
+	remote_port: NumericIdentifier,
+});
+export type DnsConfig = t.TypeOf<typeof DnsConfig>;
+
 /**
  * The internal object representation of redsocks.conf, obtained
  * from RedsocksConf.parse
  */
 export const RedsocksConfig = t.partial({
 	redsocks: ProxyConfig,
+	dns: DnsConfig,
 });
 export type RedsocksConfig = t.TypeOf<typeof RedsocksConfig>;
 

@@ -4,7 +4,11 @@ import type { SinonStub } from 'sinon';
 
 import * as hostConfig from '~/src/host-config';
 import { RedsocksConf } from '~/src/host-config/proxy';
-import type { RedsocksConfig, ProxyConfig } from '~/src/host-config/types';
+import type {
+	RedsocksConfig,
+	ProxyConfig,
+	DnsConfig,
+} from '~/src/host-config/types';
 import log from '~/lib/supervisor-console';
 
 describe('RedsocksConf', () => {
@@ -17,6 +21,10 @@ describe('RedsocksConf', () => {
 					port: 1080,
 					login: '"foo"',
 					password: '"bar"',
+				},
+				dns: {
+					remote_ip: '8.8.8.8',
+					remote_port: 53,
 				},
 			};
 			const confStr = RedsocksConf.stringify(conf);
@@ -38,6 +46,13 @@ describe('RedsocksConf', () => {
 					password = "bar";
 					local_ip = 127.0.0.1;
 					local_port = 12345;
+				}
+
+				dnsu2t {
+					remote_ip = 8.8.8.8;
+					remote_port = 53;
+					local_ip = 127.0.0.1;
+					local_port = 53;
 				}
 			` + '\n',
 			);
@@ -77,7 +92,7 @@ describe('RedsocksConf', () => {
 			);
 		});
 
-		it('accepts port field of type string', () => {
+		it('accepts port/remote_port fields of type string', () => {
 			const conf = {
 				redsocks: {
 					type: 'socks5',
@@ -85,6 +100,10 @@ describe('RedsocksConf', () => {
 					port: '1080',
 					login: 'foo',
 					password: 'bar',
+				},
+				dns: {
+					remote_ip: '9.9.9.9',
+					remote_port: '54',
 				},
 			} as unknown as RedsocksConfig;
 			const confStr = RedsocksConf.stringify(conf);
@@ -107,6 +126,13 @@ describe('RedsocksConf', () => {
 					local_ip = 127.0.0.1;
 					local_port = 12345;
 				}
+
+				dnsu2t {
+					remote_ip = 9.9.9.9;
+					remote_port = 54;
+					local_ip = 127.0.0.1;
+					local_port = 53;
+				}
 			` + '\n',
 			);
 		});
@@ -120,6 +146,23 @@ describe('RedsocksConf', () => {
 		it('stringifies to empty string when provided empty redsocks block', () => {
 			const conf: RedsocksConfig = {
 				redsocks: {} as ProxyConfig,
+			};
+			const confStr = RedsocksConf.stringify(conf);
+			expect(confStr).to.equal('');
+		});
+
+		it('stringifies to empty string when provided empty dns block', () => {
+			const conf: RedsocksConfig = {
+				dns: {} as DnsConfig,
+			};
+			const confStr = RedsocksConf.stringify(conf);
+			expect(confStr).to.equal('');
+		});
+
+		it('stringifies to empty string when provided empty redsocks and dns blocks', () => {
+			const conf: RedsocksConfig = {
+				redsocks: {} as ProxyConfig,
+				dns: {} as DnsConfig,
 			};
 			const confStr = RedsocksConf.stringify(conf);
 			expect(confStr).to.equal('');
@@ -166,7 +209,7 @@ describe('RedsocksConf', () => {
 
 		it("parses `redsocks {...}` config block no matter what position it's in or how many newlines surround it", () => {
 			const redsocksConfStr = stripIndent`
-				dnsu2t {
+				dnsudp {
 					test = test;
 				}
                 redsocks {
@@ -274,6 +317,36 @@ describe('RedsocksConf', () => {
 			expect(conf3).to.deep.equal(expected);
 		});
 
+		it('parses `dnsu2t {...}` config block', () => {
+			const redsocksConfStr = stripIndent`
+				dnsu2t {
+					local_ip = 127.0.0.1;
+					local_port = 53;
+					remote_ip = 8.8.8.8;
+					remote_port = 53;
+				}
+				redsocks {
+					local_ip = 127.0.0.1;
+					local_port = 12345;
+					ip = 1.2.3.4;
+					port = 1080;
+					type = socks5;
+				}
+			`;
+			const conf = RedsocksConf.parse(redsocksConfStr);
+			expect(conf).to.deep.equal({
+				dns: {
+					remote_ip: '8.8.8.8',
+					remote_port: 53,
+				},
+				redsocks: {
+					ip: '1.2.3.4',
+					port: 1080,
+					type: 'socks5',
+				},
+			});
+		});
+
 		it('parses to empty redsocks config with warnings while any values are invalid', () => {
 			const redsocksConfStr = stripIndent`
                 redsocks {
@@ -301,6 +374,33 @@ describe('RedsocksConf', () => {
 			);
 			(log.warn as SinonStub).resetHistory();
 			expect(conf).to.deep.equal({});
+		});
+
+		it('parses to empty config, ignoring valid dnsu2t config, if redsocks block is invalid', () => {
+			const redsocksConfStr = stripIndent`
+				dnsu2t {
+					remote_ip = 8.8.8.8;
+					remote_port = 53;
+				}
+				redsocks {
+					type = socks6;
+					ip = 1.2.3.4;
+					port = 1080;
+					invalid_field = invalid_value;
+				}
+			`;
+			(log.warn as SinonStub).resetHistory();
+			const conf = RedsocksConf.parse(redsocksConfStr);
+			expect(conf).to.deep.equal({});
+			expect((log.warn as SinonStub).lastCall.args[0]).to.equal(
+				'Invalid redsocks block in redsocks.conf:\n' +
+					'Expecting one of:\n' +
+					'    "socks4"\n' +
+					'    "socks5"\n' +
+					'    "http-connect"\n' +
+					'    "http-relay"\n' +
+					'at 0.type but instead got: "socks6"',
+			);
 		});
 
 		it('parses to empty config with warnings while some key-value pairs are malformed', () => {
