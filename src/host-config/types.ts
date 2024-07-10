@@ -36,16 +36,23 @@ export const RedsocksConfig = t.partial({
 });
 export type RedsocksConfig = t.TypeOf<typeof RedsocksConfig>;
 
-/**
- * An intersection of writeable redsocks.conf configurations, and
- * additional noProxy field (which is a config relating to proxy configuration)
- */
-export const HostProxyConfig = t.intersection([
+const HostProxyConfigWithoutDns = t.intersection([
 	ProxyConfig,
 	t.partial({
 		noProxy: t.array(t.string),
 	}),
 ]);
+type HostProxyConfigWithoutDns = t.TypeOf<typeof HostProxyConfigWithoutDns>;
+
+/**
+ * An intersection of writeable redsocks.conf configurations for the
+ * redsocks {...} and dns {...} blocks, and additional noProxy field
+ * (which is a config relating to proxy configuration)
+ */
+export const HostProxyConfig = t.partial({
+	proxy: HostProxyConfigWithoutDns,
+	dns: DnsConfig,
+});
 export type HostProxyConfig = t.TypeOf<typeof HostProxyConfig>;
 
 /**
@@ -56,8 +63,9 @@ export type HostProxyConfig = t.TypeOf<typeof HostProxyConfig>;
 export const HostConfiguration = t.type({
 	network: t.exact(
 		t.partial({
-			proxy: t.exact(HostProxyConfig),
+			proxy: t.exact(HostProxyConfigWithoutDns),
 			hostname: t.string,
+			dns: t.union([t.string, t.boolean]),
 		}),
 	),
 });
@@ -70,11 +78,12 @@ export type HostConfiguration = t.TypeOf<typeof HostConfiguration>;
  * valid but has the correct shape.
  */
 export const LegacyHostConfiguration = t.type({
-	network: t.exact(
-		t.partial({
-			proxy: t.record(t.string, t.any),
-			hostname: t.string,
-		}),
-	),
+	network: t.partial({
+		proxy: t.record(t.string, t.any),
+		hostname: t.string,
+		// dns was added after the initial implementation, so its type is more
+		// strictly enforced than the other older fields.
+		dns: t.union([t.string, t.boolean]),
+	}),
 });
 export type LegacyHostConfiguration = t.TypeOf<typeof LegacyHostConfiguration>;

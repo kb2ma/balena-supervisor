@@ -15,6 +15,9 @@ const proxyBasePath = pathOnBoot('system-proxy');
 const noProxyPath = path.join(proxyBasePath, 'no_proxy');
 const redsocksConfPath = path.join(proxyBasePath, 'redsocks.conf');
 
+export const DEFAULT_REMOTE_IP = '8.8.8.8';
+export const DEFAULT_REMOTE_PORT = 53;
+
 const disallowedProxyFields = ['local_ip', 'local_port'];
 
 const isAuthField = (field: string): boolean =>
@@ -202,15 +205,24 @@ export async function readProxy(): Promise<HostProxyConfig | undefined> {
 	const noProxy = await readNoProxy();
 
 	// Build proxy object
-	const proxy = {
-		...redsocksConf.redsocks,
-		...(noProxy.length && { noProxy }),
+	const config: HostProxyConfig = {
+		...(redsocksConf.redsocks && {
+			proxy: {
+				...redsocksConf.redsocks,
+				...(noProxy.length && { noProxy }),
+			},
+		}),
 	};
+
+	// Add dns config
+	if (redsocksConf.dns) {
+		config.dns = redsocksConf.dns;
+	}
 
 	// Assumes mandatory proxy config fields (type, ip, port) are present,
 	// even if they very well may not be. It is up to the user to ensure
 	// that all the necessary fields are present in the redsocks.conf file.
-	return proxy as HostProxyConfig;
+	return config;
 }
 
 export async function setProxy(

@@ -492,6 +492,7 @@ describe('src/host-config', () => {
 						noProxy: ['8.8.8.8'],
 					},
 					hostname: 'balena',
+					dns: '1.2.3.4:54',
 				},
 			};
 			expect(hostConfig.parse(conf)).to.deep.equal(conf);
@@ -531,6 +532,29 @@ describe('src/host-config', () => {
 				},
 			};
 			expect(hostConfig.parse(conf)).to.deep.equal(conf);
+		});
+
+		it('parses valid HostConfiguration with only dns', () => {
+			const conf = {
+				network: {
+					dns: '1.2.3.4:54',
+				},
+			};
+			expect(hostConfig.parse(conf)).to.deep.equal(conf);
+
+			const conf2 = {
+				network: {
+					dns: true,
+				},
+			};
+			expect(hostConfig.parse(conf2)).to.deep.equal(conf2);
+
+			const conf3 = {
+				network: {
+					dns: false,
+				},
+			};
+			expect(hostConfig.parse(conf3)).to.deep.equal(conf3);
 		});
 
 		it('parses HostConfiguration where auth fields are missing double quotes', () => {
@@ -639,6 +663,17 @@ describe('src/host-config', () => {
 			);
 		});
 
+		it('throws error for HostConfiguration with invalid dns', () => {
+			const conf = {
+				network: {
+					dns: 123,
+				},
+			};
+			expect(() => hostConfig.parse(conf)).to.throw(
+				'Could not parse host config input to a valid format',
+			);
+		});
+
 		it("strips additional inputs from HostConfiguration while not erroring if some optional inputs aren't present", () => {
 			const conf = {
 				network: {
@@ -654,6 +689,8 @@ describe('src/host-config', () => {
 						local_ip: '127.0.0.2',
 						local_port: 1082,
 					},
+					dns: '1.2.3.4:54',
+					hostname: 'balena',
 					// extra key present
 					extra: true,
 				},
@@ -667,6 +704,8 @@ describe('src/host-config', () => {
 						login: '"foo"',
 						noProxy: ['2.2.2.2'],
 					},
+					dns: '1.2.3.4:54',
+					hostname: 'balena',
 				},
 			});
 		});
