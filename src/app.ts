@@ -2,7 +2,7 @@
  * Entry point for Supervisor application. Supervisor is factored into many modules.
  * The diagram and table below guides you to these internals.
  *
- * [[include:supervisor-arch.svg]]
+ * <img src="../docs/supervisor-arch.svg"/>
  *
  * | Module/Folder | Context / Description |
  * | ------------- | ----------- |
@@ -12,11 +12,11 @@
  * | config folder | Interface and definitions for configuration data |
  * | [db](db.html) | Storage for Supervisor state |
  * | device-api folder | Provides endpoints for Supervisor HTTP API |
- * | [device-config](device-config.html) | Access to device configuration and steps to change it |
- * | [device-state](device-state.html) | Application level access to device state, checks, reports, events |
+ * | [device-config](device_config.html) | Access to device configuration and steps to change it |
+ * | [device-state](device_state.html) | Application level access to device state, checks, reports, events |
  * | [logger](logger.html) | Application interface for logging |
  * | logging folder | Contains logging implementations |
- * | [supervisor-api](supervisor-api.html) | Server for Supervisor HTTP API |
+ * | [supervisor-api](device_api.html) | Server for Supervisor HTTP API |
  * | [supervisor-console](lib_supervisor_console.html) | Prints log messages to stdout |
  * | [](.html) | |
  *
