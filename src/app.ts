@@ -7,18 +7,19 @@
  * | Module/Folder | Context / Description |
  * | ------------- | ----------- |
  * | [supervisor](supervisor.html) | Initialization for Supervisor application modules |
- * | api-binder folder | Implements HTTP interface to balena cloud API |
+ * | api-binder folder | Implements HTTP interface to balena cloud API; sends state reports |
  * | [application-manager](compose_application_manager.html) | Directs imageManager and creates steps for state transitions |
- * | config folder | Interface and definitions for configuration data |
+ * | compose folder | Abstractions for container artifacts like images, services, networks, and volumes  |
+ * | config folder | Access to configuration data; there are two sources: `config.json` and a SQLite database |
  * | [db](db.html) | Storage for Supervisor state |
  * | device-api folder | Provides endpoints for Supervisor HTTP API |
  * | [device-config](device_config.html) | Access to device configuration and steps to change it |
  * | [device-state](device_state.html) | Application level access to device state, checks, reports, events |
+ * | [dockerUtils](lib_docker_utils.html) | Interface to container engine |
  * | [logger](logger.html) | Application interface for logging |
  * | logging folder | Contains logging implementations |
  * | [supervisor-api](device_api.html) | Server for Supervisor HTTP API |
  * | [supervisor-console](lib_supervisor_console.html) | Prints log messages to stdout |
- * | [](.html) | |
  *
  * @module
  */
