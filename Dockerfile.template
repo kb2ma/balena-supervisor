@@ -51,9 +51,11 @@ RUN npm ci --build-from-source=sqlite3 --sqlite=/usr/lib
 # musl. We hack around this by copying the binary and its library
 # dependencies to the final image
 ###################################################################
-FROM debian:bullseye-slim as journal
+#FROM debian:bullseye-slim as journal
+FROM fedora:39 as journal
 
-RUN apt-get update && apt-get install -y --no-install-recommends systemd
+#RUN apt-get update && apt-get install -y --no-install-recommends systemd
+RUN dnf upgrade && dnf install -y systemd --setopt=install_weak_deps=False
 
 COPY ./build-utils/setup-journal.sh /
 RUN /setup-journal.sh
